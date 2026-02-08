@@ -1,0 +1,44 @@
+[
+  {
+    "firstName": "ram",
+    "lastName": "ssj",
+    "email": "manjunaths16336@gmail.com",
+    "company": "amma",
+    "role": "Chief Underwriting Officer",
+    "volume": "Less than 1,000",
+    "message": "dde",
+    "timestamp": "2026-02-08T16:13:13.676Z",
+    "id": "0d88b563",
+    "submitted_at": "2026-02-08T21:43:13.994727",
+    "status": "new"
+  },
+  {
+    "firstName": "ram",
+    "lastName": "ssj",
+    "email": "manjunaths16336@gmail.com",
+    "company": "amma",
+    "role": "Claims Manager",
+    "volume": "1,000 - 10,000",
+    "message": "hvhvh",
+    "timestamp": "2026-02-08T16:29:28.089Z",
+    "id": "0bff334e",
+    "submitted_at": "2026-02-08T21:59:28.396520",
+    "status": "new"
+  },
+  {
+    "firstName": "ram",
+    "lastName": "ssj",
+    "email": "manjunaths16336@gmail.com",
+    "company": "amma",
+    "role": "Claims Manager",
+    "volume": "Less than 1,000",
+    "message": "hvhv",
+    "timestamp": "2026-02-08T17:02:45.064Z",
+    "_subject": "🚀 New Early Access Request for Kimi AI",
+    "_captcha": "false",
+    "_template": "table",
+    "id": "93c62fa3",
+    "submitted_at": "2026-02-08T22:32:45.069610",
+    "status": "new"
+  }
+]

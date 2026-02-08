@@ -1,0 +1,11 @@
+backend/
+results/
+uploads/
+__pycache__/
+*.py
+*.pyc
+requirements.txt
+.env
+index-old.html
+YC_APPLICATION.md
+.gitignore

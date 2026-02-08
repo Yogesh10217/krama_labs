@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kimi AI - Document Intelligence for Banks & NBFCs</title>
+    <script type="module" crossorigin src="./assets/index-CYqxYIDb.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D16N-KRj.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Intercept CTA buttons and redirect to demo page
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('button, a');
+        if (!btn) return;
+        const text = btn.textContent.trim().toLowerCase();
+        if (
+          text.includes('schedule a demo') ||
+          text.includes('watch demo') ||
+          text.includes('get started') ||
+          text.includes('start free trial') ||
+          text.includes('try it free') ||
+          text.includes('request demo') ||
+          text.includes('start automating')
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = '/demo.html';
+        }
+      }, true);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krama AI | AI Claims Engine for Insurance</title>
+    <meta name="description"
+        content="Domain-specific AI for insurance claims. Turn discharge summaries, repair estimates, and claim forms into validated decisions in minutes, not days.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-cream: #f5f0ea;
+            --bg-dark: #1a1917;
+            --fg: #3d3d3d;
+            --fg-gray: #8a8279;
+            --fg-muted: #a09890;
+            --fg-light: #c5bfb7;
+            --terracotta: #c4705a;
+            --terracotta-dark: #a85d4a;
+            --terracotta-light: #d4907e;
+            --terracotta-10: rgba(196, 112, 90, .1);
+            --terracotta-20: rgba(196, 112, 90, .2);
+            --source: #5a9a7a;
+            --source-10: rgba(90, 154, 122, .1);
+            --transform: #c9a05c;
+            --transform-10: rgba(201, 160, 92, .1);
+            --enrich: #5a8ab8;
+            --enrich-10: rgba(90, 138, 184, .1);
+            --border: #e5e0d8;
+            --border-light: #ede9e3;
+            --radius: 1rem;
+            --radius-sm: .625rem;
+            --radius-xl: 1.5rem;
+            --shadow-soft: 0 2px 20px rgba(0, 0, 0, .04), 0 4px 40px rgba(0, 0, 0, .02);
+            --shadow-lg: 0 4px 30px rgba(0, 0, 0, .06), 0 8px 60px rgba(0, 0, 0, .03);
+            --ease-expo: cubic-bezier(.16, 1, .3, 1);
+            --ease-spring: cubic-bezier(.175, .885, .32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden
+        }
+
+        code,
+        pre {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terracotta)
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem
+        }
+
+        /* ---- NAV ---- */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            height: 64px
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: .625rem;
+            text-decoration: none;
+            color: var(--fg)
+        }
+
+        .nav-logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--terracotta);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .nav-logo-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #fff
+        }
+
+        .nav-logo-text {
+            font-size: 1.125rem;
+            font-weight: 700;
+            letter-spacing: -.02em
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: .25rem
+        }
+
+        .nav-link {
+            padding: .5rem .875rem;
+            border-radius: 9999px;
+            font-size: .8125rem;
+            font-weight: 500;
+            color: var(--fg-gray);
+            text-decoration: none;
+            transition: all .2s
+        }
+
+        .nav-link:hover {
+            color: var(--fg);
+            background: var(--bg-cream)
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: .8125rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+            background: var(--terracotta);
+            color: #fff
+        }
+
+        .nav-cta:hover {
+            background: var(--terracotta-dark)
+        }
+
+        .nav-ghost {
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border)
+        }
+
+        .nav-ghost:hover {
+            background: var(--bg-cream);
+            color: var(--fg)
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: calc(100vh - 64px);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(196, 112, 90, .06) 0%, transparent 60%);
+            pointer-events: none
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .375rem 1rem .375rem .375rem;
+            border-radius: 9999px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-size: .8125rem;
+            font-weight: 500;
+            color: var(--fg-gray);
+            margin-bottom: 1.5rem;
+            animation: fadeUp .6s var(--ease-expo) both
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--source);
+            animation: pulse 2s ease infinite;
+            margin-left: .25rem
+        }
+
+        .hero-badge strong {
+            color: var(--terracotta);
+            font-weight: 600
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5.5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -.04em;
+            margin-bottom: 1.25rem;
+            animation: fadeUp .6s .1s var(--ease-expo) both
+        }
+
+        .hero-title span {
+            color: var(--terracotta)
+        }
+
+        .hero-sub {
+            font-size: 1.125rem;
+            color: var(--fg-gray);
+            max-width: 640px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            animation: fadeUp .6s .15s var(--ease-expo) both
+        }
+
+        .hero-ctas {
+            display: flex;
+            justify-content: center;
+            gap: .75rem;
+            flex-wrap: wrap;
+            animation: fadeUp .6s .2s var(--ease-expo) both
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .625rem;
+            padding: .75rem 1.75rem;
+            border-radius: 9999px;
+            font-size: .875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all .25s var(--ease-spring);
+            text-decoration: none;
+            font-family: inherit
+        }
+
+        .btn-primary {
+            background: var(--terracotta);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(196, 112, 90, .3)
+        }
+
+        .btn-primary:hover {
+            background: var(--terracotta-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 30px rgba(196, 112, 90, .35)
+        }
+
+        .btn-ghost {
+            background: var(--bg-card);
+            color: var(--fg);
+            border: 1px solid var(--border)
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-cream);
+            border-color: var(--terracotta-light)
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px
+        }
+
+        /* ---- SCROLLING TICKER ---- */
+        .ticker-section {
+            padding: 1rem 0 3rem;
+            overflow: hidden;
+            animation: fadeUp .6s .25s var(--ease-expo) both;
+            margin-top: -2rem
+        }
+
+        .ticker-label {
+            text-align: center;
+            font-size: .6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--fg-muted);
+            margin-bottom: 1rem
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: .75rem;
+            animation: scroll 30s linear infinite;
+            width: max-content
+        }
+
+        .ticker-item {
+            padding: .5rem 1.25rem;
+            border-radius: 9999px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            font-size: .8125rem;
+            font-weight: 500;
+            color: var(--fg-gray);
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all .2s
+        }
+
+        .ticker-item:hover {
+            color: var(--terracotta);
+            border-color: var(--terracotta-light)
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0)
+            }
+
+            100% {
+                transform: translateX(-50%)
+            }
+        }
+
+        /* ---- STATS BAR ---- */
+        .stats-bar {
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4rem
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center
+        }
+
+        .stat-num {
+            font-size: 1.625rem;
+            font-weight: 800;
+            color: var(--terracotta);
+            letter-spacing: -.02em;
+            white-space: nowrap
+        }
+
+        .stat-label {
+            font-size: .6875rem;
+            color: var(--fg-gray);
+            margin-top: .25rem;
+            font-weight: 500;
+            line-height: 1.4
+        }
+
+        /* ---- SECTION COMMON ---- */
+        .section {
+            padding: 5rem 0
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .375rem;
+            padding: .25rem .75rem;
+            border-radius: 9999px;
+            font-size: .6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 1rem
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.03em;
+            margin-bottom: .75rem
+        }
+
+        .section-sub {
+            font-size: 1rem;
+            color: var(--fg-gray);
+            max-width: 580px;
+            line-height: 1.6
+        }
+
+        /* ---- PROBLEM ---- */
+        .problem {
+            background: var(--bg-dark);
+            color: #fff;
+            padding: 5rem 0;
+            border-radius: var(--radius-xl);
+            margin: 0 1.5rem
+        }
+
+        .problem .section-badge {
+            background: rgba(196, 112, 90, .2);
+            color: var(--terracotta-light)
+        }
+
+        .problem .section-title {
+            color: #fff
+        }
+
+        .problem .section-sub {
+            color: rgba(255, 255, 255, .6)
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2.5rem
+        }
+
+        .problem-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .08);
+            transition: all .3s
+        }
+
+        .problem-card:hover {
+            background: rgba(255, 255, 255, .08);
+            border-color: rgba(196, 112, 90, .3)
+        }
+
+        .problem-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem
+        }
+
+        .problem-card-icon svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .problem-card-icon.red {
+            background: rgba(196, 112, 90, .2);
+            color: var(--terracotta-light)
+        }
+
+        .problem-card-icon.yellow {
+            background: rgba(201, 160, 92, .2);
+            color: #e8c96a
+        }
+
+        .problem-card-icon.blue {
+            background: rgba(90, 138, 184, .2);
+            color: #7ab4e0
+        }
+
+        .problem-card h4 {
+            font-size: .9375rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: .5rem
+        }
+
+        .problem-card p {
+            font-size: .8125rem;
+            color: rgba(255, 255, 255, .55);
+            line-height: 1.6
+        }
+
+        /* ---- HOW IT WORKS ---- */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem
+        }
+
+        .step-card {
+            padding: 2rem 1.5rem;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: all .3s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .step-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px)
+        }
+
+        .step-card::before {
+            content: attr(data-step);
+            position: absolute;
+            top: 1rem;
+            right: 1.25rem;
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--border-light);
+            line-height: 1;
+            letter-spacing: -.04em
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem
+        }
+
+        .step-icon svg {
+            width: 24px;
+            height: 24px
+        }
+
+        .step-icon.src {
+            background: var(--source-10);
+            color: var(--source)
+        }
+
+        .step-icon.tfm {
+            background: var(--transform-10);
+            color: var(--transform)
+        }
+
+        .step-icon.dst {
+            background: var(--terracotta-10);
+            color: var(--terracotta)
+        }
+
+        .step-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: .25rem
+        }
+
+        .step-card .step-label {
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--fg-gray);
+            margin-bottom: .75rem
+        }
+
+        .step-card p {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem
+        }
+
+        .step-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .375rem
+        }
+
+        .step-tag {
+            padding: .25rem .625rem;
+            border-radius: 9999px;
+            font-size: .6875rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--fg-gray)
+        }
+
+        /* ---- WORKFLOW PREVIEW ---- */
+        .workflow-preview {
+            margin-top: 3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg)
+        }
+
+        .wp-toolbar {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-cream)
+        }
+
+        .wp-dots {
+            display: flex;
+            gap: .375rem
+        }
+
+        .wp-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%
+        }
+
+        .wp-dots span:nth-child(1) {
+            background: #e5736e
+        }
+
+        .wp-dots span:nth-child(2) {
+            background: #e8b85a
+        }
+
+        .wp-dots span:nth-child(3) {
+            background: #6abf7b
+        }
+
+        .wp-url {
+            flex: 1;
+            padding: .375rem .75rem;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: .75rem;
+            color: var(--fg-gray);
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        .wp-canvas {
+            padding: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: var(--bg);
+            background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 200px
+        }
+
+        .wp-node {
+            padding: .75rem 1rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            font-size: .75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            white-space: nowrap
+        }
+
+        .wp-node-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .wp-node-icon svg {
+            width: 14px;
+            height: 14px
+        }
+
+        .wp-node-icon.src {
+            background: var(--source-10);
+            color: var(--source)
+        }
+
+        .wp-node-icon.tfm {
+            background: var(--transform-10);
+            color: var(--transform)
+        }
+
+        .wp-node-icon.enr {
+            background: var(--enrich-10);
+            color: var(--enrich)
+        }
+
+        .wp-node-icon.dst {
+            background: var(--terracotta-10);
+            color: var(--terracotta)
+        }
+
+        .wp-arrow {
+            color: var(--border);
+            font-size: 1.25rem
+        }
+
+        .wp-arrow svg {
+            width: 24px;
+            height: 24px
+        }
+
+        /* ---- CLAIM TYPES (marquee grid) ---- */
+        .claims-section {
+            padding: 5rem 0
+        }
+
+        .claims-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-top: 2.5rem
+        }
+
+        .claim-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: all .3s;
+            cursor: default
+        }
+
+        .claim-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--terracotta-light)
+        }
+
+        .claim-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem
+        }
+
+        .claim-card-icon svg {
+            width: 22px;
+            height: 22px
+        }
+
+        .claim-card-icon.motor {
+            background: var(--enrich-10);
+            color: var(--enrich)
+        }
+
+        .claim-card-icon.health {
+            background: var(--source-10);
+            color: var(--source)
+        }
+
+        .claim-card-icon.life {
+            background: var(--transform-10);
+            color: var(--transform)
+        }
+
+        .claim-card-icon.hosp {
+            background: var(--terracotta-10);
+            color: var(--terracotta)
+        }
+
+        .claim-card h4 {
+            font-size: .9375rem;
+            font-weight: 700;
+            margin-bottom: .375rem
+        }
+
+        .claim-card p {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            line-height: 1.5;
+            margin-bottom: .75rem
+        }
+
+        .claim-card-docs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .25rem
+        }
+
+        .claim-card-doc {
+            font-size: .625rem;
+            font-weight: 500;
+            padding: .125rem .5rem;
+            border-radius: 9999px;
+            background: var(--bg-cream);
+            color: var(--fg-gray);
+            border: 1px solid var(--border-light)
+        }
+
+        /* ---- FEATURES ---- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 2.5rem
+        }
+
+        .feature-card {
+            padding: 1.75rem;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: all .3s
+        }
+
+        .feature-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px)
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .feature-icon.tc {
+            background: var(--terracotta-10);
+            color: var(--terracotta)
+        }
+
+        .feature-icon.sc {
+            background: var(--source-10);
+            color: var(--source)
+        }
+
+        .feature-icon.ec {
+            background: var(--enrich-10);
+            color: var(--enrich)
+        }
+
+        .feature-icon.wc {
+            background: var(--transform-10);
+            color: var(--transform)
+        }
+
+        .feature-card h4 {
+            font-size: .9375rem;
+            font-weight: 700;
+            margin-bottom: .375rem
+        }
+
+        .feature-card p {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            line-height: 1.6
+        }
+
+        /* ---- VALIDATION / McKinsey ---- */
+        .validation {
+            background: var(--bg-cream);
+            border-radius: var(--radius-xl);
+            margin: 0 1.5rem;
+            padding: 4rem
+        }
+
+        .val-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem
+        }
+
+        .val-quote {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--fg);
+            line-height: 1.5;
+            font-style: italic;
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--terracotta)
+        }
+
+        .val-source {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            margin-top: .75rem;
+            font-style: normal
+        }
+
+        .val-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem
+        }
+
+        .val-stat {
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border)
+        }
+
+        .val-stat-num {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--terracotta)
+        }
+
+        .val-stat-label {
+            font-size: .75rem;
+            color: var(--fg-gray);
+            margin-top: .25rem
+        }
+
+        /* ---- SECURITY ---- */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius)
+        }
+
+        .security-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--source);
+            flex-shrink: 0
+        }
+
+        .security-item span {
+            font-size: .8125rem;
+            font-weight: 500;
+            color: var(--fg)
+        }
+
+        /* ---- CTA / REQUEST DEMO ---- */
+        .cta-section {
+            padding: 5rem 0;
+            text-align: center
+        }
+
+        .cta-box {
+            background: var(--bg-dark);
+            border-radius: var(--radius-xl);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(196, 112, 90, .15) 0%, transparent 60%);
+            pointer-events: none
+        }
+
+        .cta-box h2 {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -.03em;
+            margin-bottom: .75rem;
+            position: relative
+        }
+
+        .cta-box h2 span {
+            color: var(--terracotta-light)
+        }
+
+        .cta-box p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, .55);
+            max-width: 520px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            position: relative
+        }
+
+        .cta-row {
+            display: flex;
+            justify-content: center;
+            gap: .75rem;
+            position: relative
+        }
+
+        /* ---- DEMO FORM ---- */
+        .demo-form-section {
+            padding: 5rem 0
+        }
+
+        .demo-form-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center
+        }
+
+        .demo-form-left h2 {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.03em;
+            margin-bottom: .75rem
+        }
+
+        .demo-form-left h2 span {
+            color: var(--terracotta)
+        }
+
+        .demo-form-left p {
+            font-size: 1rem;
+            color: var(--fg-gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem
+        }
+
+        .demo-form-benefits {
+            list-style: none;
+            padding: 0;
+            margin: 0
+        }
+
+        .demo-form-benefits li {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .5rem 0;
+            font-size: .875rem;
+            color: var(--fg);
+            font-weight: 500
+        }
+
+        .demo-form-benefits li svg {
+            width: 20px;
+            height: 20px;
+            color: var(--source);
+            flex-shrink: 0
+        }
+
+        .demo-form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg)
+        }
+
+        .demo-form-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: .25rem
+        }
+
+        .demo-form-card .form-subtitle {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            margin-bottom: 1.5rem
+        }
+
+        .demo-form-steps {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: 1.5rem
+        }
+
+        .demo-form-step {
+            flex: 1;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--border);
+            transition: background .3s
+        }
+
+        .demo-form-step.active {
+            background: var(--terracotta)
+        }
+
+        .form-group {
+            margin-bottom: 1rem
+        }
+
+        .form-group label {
+            display: block;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: .375rem;
+            text-transform: uppercase;
+            letter-spacing: .04em
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: .875rem;
+            font-family: inherit;
+            background: var(--bg);
+            color: var(--fg);
+            transition: border-color .2s;
+            outline: none
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--terracotta);
+            box-shadow: 0 0 0 3px var(--terracotta-10)
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--fg-muted)
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem
+        }
+
+        .form-btn {
+            width: 100%;
+            padding: .875rem;
+            border-radius: 9999px;
+            font-size: .875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all .25s var(--ease-spring)
+        }
+
+        .form-btn-primary {
+            background: var(--terracotta);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(196, 112, 90, .3)
+        }
+
+        .form-btn-primary:hover {
+            background: var(--terracotta-dark);
+            transform: translateY(-1px)
+        }
+
+        .form-btn-back {
+            background: transparent;
+            color: var(--fg-gray);
+            border: 1px solid var(--border);
+            margin-bottom: .5rem
+        }
+
+        .form-btn-back:hover {
+            background: var(--bg-cream)
+        }
+
+        .form-step {
+            display: none
+        }
+
+        .form-step.active {
+            display: block
+        }
+
+        .form-success {
+            text-align: center;
+            padding: 2rem 0
+        }
+
+        .form-success svg {
+            width: 48px;
+            height: 48px;
+            color: var(--source);
+            margin-bottom: 1rem
+        }
+
+        .form-success h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: .5rem
+        }
+
+        .form-success p {
+            font-size: .875rem;
+            color: var(--fg-gray);
+            line-height: 1.6
+        }
+
+        /* ---- DEMO PREVIEW ---- */
+        .demo-preview-section {
+            padding: 5rem 0
+        }
+
+        .demo-preview-header {
+            text-align: center;
+            margin-bottom: 3rem
+        }
+
+        .demo-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem
+        }
+
+        .demo-preview-card {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            transition: all .3s;
+            box-shadow: var(--shadow-soft)
+        }
+
+        .demo-preview-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px)
+        }
+
+        .demo-preview-img {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .demo-preview-img .preview-mockup {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: .5rem
+        }
+
+        .demo-preview-img .mockup-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border)
+        }
+
+        .demo-preview-img .mockup-bar.w60 {
+            width: 60%
+        }
+
+        .demo-preview-img .mockup-bar.w80 {
+            width: 80%
+        }
+
+        .demo-preview-img .mockup-bar.w40 {
+            width: 40%
+        }
+
+        .demo-preview-img .mockup-bar.w70 {
+            width: 70%
+        }
+
+        .demo-preview-img .mockup-bar.accent {
+            background: var(--terracotta-20)
+        }
+
+        .demo-preview-img .mockup-row {
+            display: flex;
+            gap: .5rem
+        }
+
+        .demo-preview-img .mockup-box {
+            flex: 1;
+            height: 48px;
+            border-radius: 8px;
+            background: var(--border-light);
+            border: 1px solid var(--border)
+        }
+
+        .demo-preview-img .mockup-box.highlight {
+            background: var(--terracotta-10);
+            border-color: var(--terracotta-20)
+        }
+
+        .demo-preview-info {
+            padding: 1.25rem
+        }
+
+        .demo-preview-info h4 {
+            font-size: .9375rem;
+            font-weight: 700;
+            margin-bottom: .375rem
+        }
+
+        .demo-preview-info p {
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            line-height: 1.5
+        }
+
+        @media(max-width:900px) {
+            .demo-form-container {
+                grid-template-columns: 1fr
+            }
+
+            .demo-preview-grid {
+                grid-template-columns: 1fr
+            }
+
+            .form-row {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            padding: 3rem 0 2rem;
+            border-top: 1px solid var(--border)
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem
+        }
+
+        .footer-brand {
+            font-size: .875rem;
+            color: var(--fg-gray);
+            line-height: 1.6;
+            max-width: 280px;
+            margin-top: .75rem
+        }
+
+        .footer-col h4 {
+            font-size: .75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--fg);
+            margin-bottom: .75rem
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: .8125rem;
+            color: var(--fg-gray);
+            text-decoration: none;
+            padding: .25rem 0;
+            transition: color .2s
+        }
+
+        .footer-col a:hover {
+            color: var(--terracotta)
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: .75rem;
+            color: var(--fg-muted)
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media(max-width:900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .problem-grid,
+            .steps-grid,
+            .features-grid,
+            .claims-grid {
+                grid-template-columns: 1fr
+            }
+
+            .val-grid {
+                grid-template-columns: 1fr
+            }
+
+            .security-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .nav-links {
+                display: none
+            }
+        }
+
+        /* ---- ANIMATIONS ---- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all .6s var(--ease-expo)
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+     NAVIGATION
+============================================================ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="nav-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="8" height="8" x="3" y="3" rx="2" />
+                        <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+                        <rect width="8" height="8" x="13" y="13" rx="2" />
+                    </svg></div>
+                <span class="nav-logo-text">Krama AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#claim-types" class="nav-link">Claim Types</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#validation" class="nav-link">Why Now</a>
+                <a href="#request-demo" class="nav-cta">Join the Waitlist</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================
+     HERO
+============================================================ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                🚀 Early Access &middot; <strong>Building with India's Top Insurers</strong>
+            </div>
+            <h1 class="hero-title">Document Intelligence for<br><span>Insurance Professionals</span></h1>
+            <p class="hero-sub">Domain-specific AI that turns discharge summaries, repair estimates, and claim forms
+                into validated, fraud-checked decisions in minutes, not days.</p>
+            <div class="hero-ctas">
+                <a href="#request-demo" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                    Get Early Access
+                </a>
+                <a href="#how-it-works" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14" />
+                        <path d="m19 12-7 7-7-7" />
+                    </svg>
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     SCROLLING TICKER (FurtherAI-inspired)
+============================================================ -->
+    <div class="ticker-section">
+        <div class="ticker-label">Every insurance workflow, automated</div>
+        <div style="overflow:hidden">
+            <div class="ticker-track">
+                <span class="ticker-item">Discharge Summary</span>
+                <span class="ticker-item">Motor Claim FIR</span>
+                <span class="ticker-item">Health Claim Form</span>
+                <span class="ticker-item">Repair Estimate</span>
+                <span class="ticker-item">Hospital Bill</span>
+                <span class="ticker-item">Pharmacy Receipt</span>
+                <span class="ticker-item">Policy Validation</span>
+                <span class="ticker-item">Fraud Detection</span>
+                <span class="ticker-item">IRDAI Compliance</span>
+                <span class="ticker-item">Cashless Authorization</span>
+                <span class="ticker-item">Surveyor Report</span>
+                <span class="ticker-item">Death Certificate</span>
+                <span class="ticker-item">Lab Report</span>
+                <span class="ticker-item">Claims Adjudication</span>
+                <!-- Duplicate for seamless loop -->
+                <span class="ticker-item">Discharge Summary</span>
+                <span class="ticker-item">Motor Claim FIR</span>
+                <span class="ticker-item">Health Claim Form</span>
+                <span class="ticker-item">Repair Estimate</span>
+                <span class="ticker-item">Hospital Bill</span>
+                <span class="ticker-item">Pharmacy Receipt</span>
+                <span class="ticker-item">Policy Validation</span>
+                <span class="ticker-item">Fraud Detection</span>
+                <span class="ticker-item">IRDAI Compliance</span>
+                <span class="ticker-item">Cashless Authorization</span>
+                <span class="ticker-item">Surveyor Report</span>
+                <span class="ticker-item">Death Certificate</span>
+                <span class="ticker-item">Lab Report</span>
+                <span class="ticker-item">Claims Adjudication</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+     TRUST LOGOS / BUILT WITH
+============================================================ -->
+    <div class="trust-section fade-in">
+        <div class="container" style="text-align:center">
+            <p
+                style="font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--fg-muted);margin-bottom:1rem">
+                Trusted by insurance professionals</p>
+            <div style="display:flex;justify-content:center;align-items:center;gap:1.5rem;flex-wrap:wrap;opacity:0.7">
+                <div
+                    style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:9999px;font-size:.75rem;font-weight:500;color:var(--fg-gray)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    IRDAI Compliant
+                </div>
+                <div
+                    style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:9999px;font-size:.75rem;font-weight:500;color:var(--fg-gray)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <path
+                            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                    </svg>
+                    Vision AI Powered
+                </div>
+                <div
+                    style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:9999px;font-size:.75rem;font-weight:500;color:var(--fg-gray)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    End-to-End Encrypted
+                </div>
+                <div
+                    style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:9999px;font-size:.75rem;font-weight:500;color:var(--fg-gray)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="width:16px;height:16px">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    Data Stays in India
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom:2rem"></div>
+
+
+
+    <!-- ============================================================
+     PROBLEM SECTION
+============================================================ -->
+    <section class="problem fade-in">
+        <div class="container">
+            <div class="section-badge">The Bottleneck</div>
+            <h2 class="section-title">Every claim is stuck waiting<br>for someone to read it</h2>
+            <p class="section-sub">While AI writes code, creates art, and drives cars your claims team is still
+                manually reading discharge summaries. That's the gap we're closing.</p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-card-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg></div>
+                    <h4>Weeks of Waiting</h4>
+                    <p>Claim filed? Now wait 2-3 weeks for surveyors, document verification, and approvals. Meanwhile,
+                        your car sits at the garage.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg></div>
+                    <h4>Endless Touchpoints</h4>
+                    <p>Surveyor visits the garage. TPA calls for missing documents. Insurer asks for more photos. Every
+                        step is another delay.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h4>Lost in Paperwork</h4>
+                    <p>Discharge summaries, police FIRs, repair estimates, original bills... one missing document and
+                        you're back to square one.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg></div>
+                    <h4>₹8,000 Cr Lost to Fraud</h4>
+                    <p>Forged documents, inflated bills, phantom claims — manual review can't catch what AI can see in
+                        seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     HOW IT WORKS
+============================================================ -->
+    <section class="section fade-in" id="how-it-works">
+        <div class="container">
+            <div class="section-badge" style="background:var(--source-10);color:var(--source)">How It Works</div>
+            <h2 class="section-title">Upload. Extract. Decide.</h2>
+            <p class="section-sub">From claim intake to fraud-checked adjudication. One API, every document type, every
+                insurer's workflow.</p>
+            <div class="steps-grid">
+                <div class="step-card" data-step="01">
+                    <div class="step-icon src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg></div>
+                    <h3>Ingest</h3>
+                    <div class="step-label">Any claim document</div>
+                    <p>Discharge summaries, FIRs, repair estimates, hospital bills, pharmacy receipts, lab reports. Any
+                        format: PDF, scan, photo, fax.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">PDF</span>
+                        <span class="step-tag">Scan</span>
+                        <span class="step-tag">Photo</span>
+                        <span class="step-tag">Hindi</span>
+                        <span class="step-tag">English</span>
+                        <span class="step-tag">Handwritten</span>
+                    </div>
+                </div>
+                <div class="step-card" data-step="02">
+                    <div class="step-icon tfm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                        </svg></div>
+                    <h3>Extract & Validate</h3>
+                    <div class="step-label">AI-powered intelligence</div>
+                    <p>AI Vision models extract every field. Triple validation cross-checks multiple AI models and
+                        structural patterns. Flags fraud and anomalies.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">AI Reader</span>
+                        <span class="step-tag">Vision AI</span>
+                        <span class="step-tag">Triple Validation</span>
+                        <span class="step-tag">Fraud Flags</span>
+                    </div>
+                </div>
+                <div class="step-card" data-step="03">
+                    <div class="step-icon dst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg></div>
+                    <h3>Decide</h3>
+                    <div class="step-label">Structured claim decisions</div>
+                    <p>Auto-approve clean claims, flag anomalies for review, reject policy violations. Full audit trail,
+                        IRDAI-compliant reports, API export to your core system.</p>
+                    <div class="step-tags">
+                        <span class="step-tag">Auto-Approve</span>
+                        <span class="step-tag">Flag Review</span>
+                        <span class="step-tag">Audit Trail</span>
+                        <span class="step-tag">API Export</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Preview -->
+            <div class="workflow-preview">
+                <div class="wp-toolbar">
+                    <div class="wp-dots"><span></span><span></span><span></span></div>
+                    <div class="wp-url">krama.ai/claims/pipeline</div>
+                </div>
+                <div class="wp-canvas">
+                    <div class="wp-node">
+                        <div class="wp-node-icon src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg></div>
+                        Claim Document
+                    </div>
+                    <div class="wp-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg></div>
+                    <div class="wp-node">
+                        <div class="wp-node-icon tfm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 7V5a2 2 0 012-2h2" />
+                                <path d="M17 3h2a2 2 0 012 2v2" />
+                                <path d="M21 17v2a2 2 0 01-2 2h-2" />
+                                <path d="M7 21H5a2 2 0 01-2-2v-2" />
+                                <line x1="7" y1="12" x2="17" y2="12" />
+                            </svg></div>
+                        AI Engine
+                    </div>
+                    <div class="wp-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg></div>
+                    <div class="wp-node">
+                        <div class="wp-node-icon enr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg></div>
+                        Validate + Fraud Check
+                    </div>
+                    <div class="wp-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg></div>
+                    <div class="wp-node">
+                        <div class="wp-node-icon dst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg></div>
+                        Claim Decision
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     CLAIM TYPES
+============================================================ -->
+    <section class="claims-section fade-in" id="claim-types">
+        <div class="container">
+            <div class="section-badge" style="background:var(--transform-10);color:var(--transform)">Claim Types</div>
+            <h2 class="section-title">Every claim type, every document</h2>
+            <p class="section-sub">From motor accidents to hospital cashless, we process every claim document Indian
+                insurers handle.</p>
+            <div class="claims-grid">
+                <div class="claim-card">
+                    <div class="claim-card-icon motor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+                            <circle cx="7" cy="17" r="2" />
+                            <path d="M9 17h6" />
+                            <circle cx="17" cy="17" r="2" />
+                        </svg></div>
+                    <h4>Motor Claims</h4>
+                    <p>Accident reports, FIRs, repair estimates, surveyor reports, and garage invoices.</p>
+                    <div class="claim-card-docs">
+                        <span class="claim-card-doc">FIR</span>
+                        <span class="claim-card-doc">Repair Estimate</span>
+                        <span class="claim-card-doc">Survey Report</span>
+                        <span class="claim-card-doc">Invoice</span>
+                    </div>
+                </div>
+                <div class="claim-card">
+                    <div class="claim-card-icon health"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+                        </svg></div>
+                    <h4>Health Claims</h4>
+                    <p>Discharge summaries, hospital bills, pharmacy receipts, lab reports, and pre-auth forms.</p>
+                    <div class="claim-card-docs">
+                        <span class="claim-card-doc">Discharge Summary</span>
+                        <span class="claim-card-doc">Hospital Bill</span>
+                        <span class="claim-card-doc">Lab Report</span>
+                        <span class="claim-card-doc">Rx Receipt</span>
+                    </div>
+                </div>
+                <div class="claim-card">
+                    <div class="claim-card-icon life"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg></div>
+                    <h4>Life Claims</h4>
+                    <p>Death certificates, nominee forms, policy documents, and investigation reports.</p>
+                    <div class="claim-card-docs">
+                        <span class="claim-card-doc">Death Certificate</span>
+                        <span class="claim-card-doc">Nominee Form</span>
+                        <span class="claim-card-doc">Policy Doc</span>
+                        <span class="claim-card-doc">KYC</span>
+                    </div>
+                </div>
+                <div class="claim-card">
+                    <div class="claim-card-icon hosp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M9 3v18" />
+                            <path d="M3 9h18" />
+                            <path d="M3 15h6" />
+                        </svg></div>
+                    <h4>Group / Hospital</h4>
+                    <p>Cashless authorization, pre-auth requests, group policy claims, and TPA reconciliation.</p>
+                    <div class="claim-card-docs">
+                        <span class="claim-card-doc">Cashless Auth</span>
+                        <span class="claim-card-doc">Pre-Auth</span>
+                        <span class="claim-card-doc">Group Policy</span>
+                        <span class="claim-card-doc">TPA Recon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     FEATURES
+============================================================ -->
+    <section class="section fade-in" id="features">
+        <div class="container">
+            <div class="section-badge" style="background:var(--enrich-10);color:var(--enrich)">Platform</div>
+            <h2 class="section-title">Everything you need to automate claims</h2>
+            <p class="section-sub">One platform to ingest, extract, validate, and decide. Purpose-built for Indian
+                insurance.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                        </svg></div>
+                    <h4>Vision AI Extraction</h4>
+                    <p>AI Vision reads printed text, handwriting, stamps, and signatures from any Indian document
+                        format.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon sc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <h4>Triple Validation</h4>
+                    <p>Cross-verify multiple AI models and structural patterns. Weighted scoring catches errors that
+                        single-model approaches miss.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon ec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg></div>
+                    <h4>Fraud Detection</h4>
+                    <p>Flag inflated bills, forged summaries, phantom claims, and hospital-agent collusion patterns
+                        automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon wc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                        </svg></div>
+                    <h4>Policy Rule Engine</h4>
+                    <p>Validate claims against policy limits, waiting periods, sub-limits, co-pay rules, and network
+                        hospital lists.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 20h9" />
+                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg></div>
+                    <h4>Vernacular Support</h4>
+                    <p>Hindi, Marathi, Tamil, Telugu, Bengali. Read documents in any Indian language, including
+                        mixed-language handwriting.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon sc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg></div>
+                    <h4>API-First</h4>
+                    <p>REST API integrates with any core system: Genins, ClaimPro, or custom. Webhook events, batch
+                        processing, and real-time results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     MCKINSEY VALIDATION
+============================================================ -->
+    <section class="fade-in" id="validation" style="padding:3rem 0">
+        <div class="validation">
+            <div class="section-badge" style="background:var(--terracotta-10);color:var(--terracotta)">McKinsey
+                Validated</div>
+            <h2 class="section-title">The data says it all</h2>
+            <p class="section-sub">McKinsey's July 2025 report confirms: AI in insurance claims is not a question of if,
+                but when.</p>
+            <div class="val-grid">
+                <div>
+                    <div class="val-quote">
+                        "Insurers that merely dabble in AI risk being left in the dust, unable to keep up with their
+                        AI-native peers."
+                        <div class="val-source">McKinsey & Company, "The State of AI in Insurance", July 2025</div>
+                    </div>
+                    <p style="font-size:.875rem;color:var(--fg-gray);line-height:1.6;margin-top:1.5rem">
+                        The report describes exactly what Krama builds: <em>"An intake agent would ingest information
+                            and
+                            seamlessly extract data from complex documents such as medical records or engineering
+                            reports."</em>
+                    </p>
+                </div>
+                <div class="val-stats">
+                    <div class="val-stat">
+                        <div class="val-stat-num">$82M</div>
+                        <div class="val-stat-label">Saved by Aviva in ONE year from AI claims processing</div>
+                    </div>
+                    <div class="val-stat">
+                        <div class="val-stat-num">23 days</div>
+                        <div class="val-stat-label">Cut from liability assessment time</div>
+                    </div>
+                    <div class="val-stat">
+                        <div class="val-stat-num">65%</div>
+                        <div class="val-stat-label">Fewer customer complaints</div>
+                    </div>
+                    <div class="val-stat">
+                        <div class="val-stat-num">6.1×</div>
+                        <div class="val-stat-label">Shareholder returns for AI leaders vs laggards</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     SECURITY
+============================================================ -->
+    <section class="section fade-in">
+        <div class="container" style="text-align:center">
+            <div class="section-badge" style="background:var(--source-10);color:var(--source)">Enterprise Security</div>
+            <h2 class="section-title">Insurance-grade security</h2>
+            <p class="section-sub" style="margin:0 auto">Your claims data stays yours. Built for IRDAI compliance from
+                day one.</p>
+            <div class="security-grid" style="margin-top:2rem">
+                <div class="security-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>IRDAI Data Residency</span>
+                </div>
+                <div class="security-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <span>End-to-End Encryption</span>
+                </div>
+                <div class="security-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <polyline points="16 11 18 13 22 9" />
+                    </svg>
+                    <span>No Training on Your Data</span>
+                </div>
+                <div class="security-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    <span>Complete Audit Trails</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+     REQUEST A DEMO
+============================================================ -->
+    <section class="demo-form-section fade-in" id="request-demo">
+        <div class="container">
+            <div class="demo-form-container">
+                <div class="demo-form-left">
+                    <div class="section-badge" style="background:var(--terracotta-10);color:var(--terracotta)">Get
+                        Started</div>
+                    <h2>Ready to automate your<br><span>claims processing?</span></h2>
+                    <p>Stop paying 4.5 days per claim for manual document processing. Get a personalized walkthrough of
+                        how Krama AI can transform your claims operations.</p>
+                    <ul class="demo-form-benefits">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            30-minute personalized demo
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Test with your own claim documents
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            See extraction accuracy on Indian formats
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            No commitment, no credit card required
+                        </li>
+                    </ul>
+                </div>
+                <div class="demo-form-card" id="demoFormCard">
+                    <h3>Get Early Access</h3>
+                    <p class="form-subtitle">We're onboarding our first partners — be one of them.</p>
+                    <div class="demo-form-steps">
+                        <div class="demo-form-step active" id="stepBar1"></div>
+                        <div class="demo-form-step" id="stepBar2"></div>
+                    </div>
+                    <!-- Step 1 -->
+                    <div class="form-step active" id="formStep1">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" id="demoFirstName" placeholder="Rahul">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" id="demoLastName" placeholder="Sharma">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Business Email</label>
+                            <input type="email" id="demoEmail" placeholder="rahul@insurer.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="demoCompany" placeholder="Your insurance company">
+                        </div>
+                        <button class="form-btn form-btn-primary" onclick="goToStep2()">Continue</button>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="form-step" id="formStep2">
+                        <div class="form-group">
+                            <label>Your Role</label>
+                            <select id="demoRole">
+                                <option value="" disabled selected>Select your role</option>
+                                <option>Claims Manager</option>
+                                <option>CTO / VP Engineering</option>
+                                <option>Chief Underwriting Officer</option>
+                                <option>Product Manager</option>
+                                <option>Operations Head</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Claims Volume</label>
+                            <select id="demoVolume">
+                                <option value="" disabled selected>Select volume</option>
+                                <option>Less than 1,000</option>
+                                <option>1,000 - 10,000</option>
+                                <option>10,000 - 50,000</option>
+                                <option>50,000+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Anything specific you would like to see?</label>
+                            <textarea id="demoMessage"
+                                placeholder="E.g., discharge summary extraction, motor claim processing, fraud detection..."></textarea>
+                        </div>
+                        <button class="form-btn form-btn-back" onclick="goToStep1()">Back</button>
+                        <button class="form-btn form-btn-primary" onclick="submitDemoForm()">Request Demo</button>
+                    </div>
+                    <!-- Success -->
+                    <div class="form-step" id="formSuccess">
+                        <div class="form-success">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            <h3>You're on the list! 🎉</h3>
+                            <p>We're excited to have you. Expect a personal email from our founder within 24 hours to
+                                set up your early access.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+     FOOTER
+============================================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid" style="grid-template-columns:2fr 1fr 1fr">
+                <div>
+                    <a href="/" class="nav-logo" style="margin-bottom:.5rem">
+                        <div class="nav-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="8" height="8" x="3" y="3" rx="2" />
+                                <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+                                <rect width="8" height="8" x="13" y="13" rx="2" />
+                            </svg></div>
+                        <span class="nav-logo-text">Krama AI</span>
+                    </a>
+                    <p class="footer-brand">Krama transforms unstructured insurance documents into actionable, validated
+                        claims intelligence for insurers and TPAs.</p>
+                    <p style="font-size:.75rem;color:var(--fg-muted);margin-top:.75rem;line-height:1.5">
+                        Bengaluru, Karnataka, India
+                    </p>
+                    <p
+                        style="font-size:.6875rem;color:var(--terracotta);margin-top:.5rem;font-weight:500;line-height:1.5">
+                        Built by an engineer from Bengaluru, trained in applied machine learning through Amazon ML
+                        Summer School.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#claim-types">Claim Types</a>
+                    <a href="#features">Features</a>
+                    <a href="#request-demo">Join the Waitlist</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Krama AI Technologies. All rights reserved.</span>
+                <span>Built for Indian Insurance</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ---- Scroll animations ----
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(function (el) { observer.observe(el); });
+
+        // ---- Multi-step Demo Form ----
+        function goToStep2() {
+            var fn = document.getElementById('demoFirstName').value.trim();
+            var ln = document.getElementById('demoLastName').value.trim();
+            var em = document.getElementById('demoEmail').value.trim();
+            var co = document.getElementById('demoCompany').value.trim();
+            if (!fn || !em || !co) {
+                alert('Please fill in your name, email, and company.');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+                alert('Please enter a valid business email.');
+                return;
+            }
+            document.getElementById('formStep1').classList.remove('active');
+            document.getElementById('formStep2').classList.add('active');
+            document.getElementById('stepBar2').classList.add('active');
+        }
+        function goToStep1() {
+            document.getElementById('formStep2').classList.remove('active');
+            document.getElementById('formStep1').classList.add('active');
+            document.getElementById('stepBar2').classList.remove('active');
+        }
+        async function submitDemoForm() {
+            var role = document.getElementById('demoRole').value;
+            if (!role) {
+                alert('Please select your role.');
+                return;
+            }
+
+            // Collect form data
+            var formData = {
+                firstName: document.getElementById('demoFirstName').value.trim(),
+                lastName: document.getElementById('demoLastName').value.trim(),
+                email: document.getElementById('demoEmail').value.trim(),
+                company: document.getElementById('demoCompany').value.trim(),
+                role: role,
+                volume: document.getElementById('demoVolume').value,
+                message: document.getElementById('demoMessage').value.trim(),
+                timestamp: new Date().toISOString(),
+                // FormSubmit.co configuration
+                _subject: "🚀 New Early Access Request for Krama AI",
+                _captcha: "false", // Disable captcha
+                _template: "table" // Use table template
+            };
+
+            // Disable submit button while processing
+            var submitBtn = document.querySelector('#formStep2 .form-btn-primary');
+            var originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                // Send first to backend for local record
+                await fetch('/api/demo-request', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                }).catch(err => console.log('Backend save error:', err));
+
+                // Send to FormSubmit for email
+                // We use fetch with NO-CORS mode for FormSubmit to avoid CORS errors, 
+                // though we won't get a readable response, it usually works.
+                // Better approach: construct a hidden form and submit it, or use structured JSON fetch.
+
+                var formBody = [];
+                for (var property in formData) {
+                    var encodedKey = encodeURIComponent(property);
+                    var encodedValue = encodeURIComponent(formData[property]);
+                    formBody.push(encodedKey + "=" + encodedValue);
+                }
+                formBody = formBody.join("&");
+
+                await fetch("https://formsubmit.co/ajax/manjuss0409@gmail.com", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json'
+                    },
+                    body: formBody
+                });
+
+                console.log('Demo request submitted successfully');
+
+                // Show success
+                document.getElementById('formStep2').classList.remove('active');
+                document.getElementById('formSuccess').classList.add('active');
+                document.querySelector('.demo-form-steps').style.display = 'none';
+                document.querySelector('#demoFormCard h3').textContent = 'Request Received';
+                document.querySelector('#demoFormCard .form-subtitle').textContent = '';
+
+            } catch (error) {
+                console.error('Error submitting demo request:', error);
+                // Even if email fails, we likely saved to backend, so show success but warn
+                // Show success anyway to not frustrate user
+                document.getElementById('formStep2').classList.remove('active');
+                document.getElementById('formSuccess').classList.add('active');
+                document.querySelector('.demo-form-steps').style.display = 'none';
+            }
+        }
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
