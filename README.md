@@ -39,8 +39,8 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 
 | Layer | Technology |
 |-------|-----------|
-| **OCR** | PaddleOCR v4 |
-| **Vision LLM** | Google Gemini 2.0 Flash |
+| **OCR** | OCR |
+| **Vision LLM** | VLMs |
 | **Backend** | Python, FastAPI |
 | **Frontend** | HTML/CSS/JS (landing page), React (app) |
 | **Validation** | Custom triple-validation engine with 5 grounding strategies |
@@ -66,7 +66,7 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 │   │   ├── converter.py        # PDF/image conversion
 │   │   ├── grounding.py        # Confidence grounding
 │   │   ├── validator.py        # Triple validation
-│   │   └── llm_provider.py     # LLM provider abstraction
+│   │   └── llm_provider.py     # fine tunedLLM provider abstraction
 │   ├── uploads/            # Uploaded documents
 │   └── results/            # Processing results (JSON)
 ```
@@ -78,7 +78,7 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 ### Prerequisites
 
 - Python 3.10+
-- Google Gemini API key (optional — OCR pipeline works without it)
+- Google API key (optional — OCR pipeline works without it)
 
 ### Setup
 
@@ -101,8 +101,8 @@ pip install -r backend/requirements.txt
 Create a `.env` file in the project root:
 
 ```env
-GOOGLE_API_KEY=your_gemini_api_key    # Optional — enables VLM extraction + chat
-LLM_PROVIDER=gemini                    # gemini | openai | local
+   # Optional — enables VLM extraction + chat
+fine-tuned LLM                   # local
 DEPLOY_MODE=saas                       # saas | onpremise | hybrid
 HOST=0.0.0.0
 PORT=8000
@@ -147,7 +147,7 @@ Returns structured JSON with extracted fields, confidence scores, validation res
 2. **OCR (PaddleOCR)** — Extracts text regions with bounding boxes and confidence scores.
 3. **Classification** — Keyword-based classifier identifies document type (30+ types across 6 categories).
 4. **Field Extraction** — Regex patterns extract structured fields specific to each document type.
-5. **VLM Extraction** *(optional)* — Gemini Vision provides a second extraction pass for higher accuracy.
+5. **VLM Extraction** *(optional)* — Vision provides a second extraction pass for higher accuracy.
 6. **Triple Validation** — OCR results, VLM results, and structural patterns are cross-checked. Conflicts are flagged.
 7. **Fraud Detection** — Anomaly detection checks for inflated bills, date inconsistencies, and forged patterns.
 8. **Decision** — IRDAI policy rules are applied. Claims are auto-approved, flagged for review, or rejected with reasons.
