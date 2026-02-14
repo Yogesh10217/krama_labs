@@ -97,14 +97,7 @@ pip install -r backend/requirements.txt
 
 ### Configuration
 
-Create a `.env` file in `backend/`:
-
-```env
-GOOGLE_API_KEY=your_api_key    # Optional — enables VLM extraction + chat
-LLM_PROVIDER=gemini            # gemini | openai | local
-HOST=0.0.0.0
-PORT=8000
-```
+Create a `.env` file in `backend/` with your API keys (see `.env.example`).
 
 ### Run
 
