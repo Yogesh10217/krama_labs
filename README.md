@@ -17,7 +17,7 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 ```
 
 - **Ingest** — PDF, scans, photos, XLSX, PPTX. Handles handwritten Hindi/English.
-- **Extract** — PaddleOCR + Gemini Vision for field-level extraction with confidence scores.
+- **Extract** — OCR + VLM for field-level extraction with confidence scores.
 - **Validate** — Triple validation cross-checks OCR, VLM, and structural patterns. Flags anomalies.
 - **Decide** — IRDAI rule checks, fraud detection, auto-adjudication recommendations with full audit trail.
 
@@ -39,12 +39,11 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 
 | Layer | Technology |
 |-------|-----------|
-| **OCR** | PaddleOCR v4 |
-| **Vision LLM** | Google Gemini 2.0 Flash |
+| **OCR** | OCR Engine (bounding box + confidence) |
+| **Vision LLM** | VLM-based extraction |
 | **Backend** | Python, FastAPI |
-| **Frontend** | HTML/CSS/JS (landing page), React (app) |
+| **Frontend** | HTML/CSS/JS |
 | **Validation** | Custom triple-validation engine with 5 grounding strategies |
-| **Deployment** | Vercel (frontend), self-hosted (backend) |
 
 ---
 
@@ -58,8 +57,8 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 │   ├── config.py           # Configuration
 │   ├── models.py           # Data models
 │   ├── engines/
-│   │   ├── ocr_engine.py       # PaddleOCR wrapper
-│   │   ├── vlm_engine.py       # Gemini Vision extraction
+│   │   ├── ocr_engine.py       # OCR wrapper
+│   │   ├── vlm_engine.py       # Vision LLM extraction
 │   │   ├── classifier.py       # Document type classification
 │   │   ├── ocr_extractor.py    # Regex-based field extraction
 │   │   ├── chunker.py          # Document chunking
@@ -78,14 +77,14 @@ Document Upload → Conversion → OCR → Classification → Field Extraction �
 ### Prerequisites
 
 - Python 3.10+
-- Google Gemini API key (optional — OCR pipeline works without it)
+- API key for VLM provider (optional — OCR pipeline works without it)
 
 ### Setup
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/kramaai.git
-cd kramaai
+git clone https://github.com/OnHighEngineer/krama_labs.git
+cd krama_labs
 
 # Create virtual environment
 python -m venv .venv
@@ -98,12 +97,11 @@ pip install -r backend/requirements.txt
 
 ### Configuration
 
-Create a `.env` file in the project root:
+Create a `.env` file in `backend/`:
 
 ```env
-GOOGLE_API_KEY=your_gemini_api_key    # Optional — enables VLM extraction + chat
-LLM_PROVIDER=gemini                    # gemini | openai | local
-DEPLOY_MODE=saas                       # saas | onpremise | hybrid
+GOOGLE_API_KEY=your_api_key    # Optional — enables VLM extraction + chat
+LLM_PROVIDER=gemini            # gemini | openai | local
 HOST=0.0.0.0
 PORT=8000
 ```
@@ -111,12 +109,11 @@ PORT=8000
 ### Run
 
 ```bash
-# Start the backend
 cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-The API will be available at `http://localhost:8000`.
+API available at `http://localhost:8000`.
 
 ---
 
@@ -143,14 +140,14 @@ Returns structured JSON with extracted fields, confidence scores, validation res
 
 ## How It Works
 
-1. **Document Conversion** — PDFs are converted to images at 200 DPI. Supports multi-page documents.
-2. **OCR (PaddleOCR)** — Extracts text regions with bounding boxes and confidence scores.
-3. **Classification** — Keyword-based classifier identifies document type (30+ types across 6 categories).
-4. **Field Extraction** — Regex patterns extract structured fields specific to each document type.
-5. **VLM Extraction** *(optional)* — Gemini Vision provides a second extraction pass for higher accuracy.
-6. **Triple Validation** — OCR results, VLM results, and structural patterns are cross-checked. Conflicts are flagged.
-7. **Fraud Detection** — Anomaly detection checks for inflated bills, date inconsistencies, and forged patterns.
-8. **Decision** — IRDAI policy rules are applied. Claims are auto-approved, flagged for review, or rejected with reasons.
+1. **Document Conversion** — PDFs converted to images. Supports multi-page documents.
+2. **OCR** — Extracts text regions with bounding boxes and confidence scores.
+3. **Classification** — Identifies document type (30+ types across 6 categories).
+4. **Field Extraction** — Type-specific regex patterns extract structured fields.
+5. **VLM Extraction** *(optional)* — Vision model provides a second extraction pass for higher accuracy.
+6. **Triple Validation** — OCR results, VLM results, and structural patterns are cross-checked. Conflicts flagged.
+7. **Fraud Detection** — Checks for inflated bills, date inconsistencies, and forged patterns.
+8. **Decision** — IRDAI policy rules applied. Claims auto-approved, flagged, or rejected with reasons.
 
 ---
 

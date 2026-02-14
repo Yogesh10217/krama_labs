@@ -310,22 +310,55 @@ RULES:
 - Use Indian insurance terminology (TPA, cashless, reimbursement, pre-auth, etc.)"""
 
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(
-            "gemini-2.0-flash",
-            generation_config={"temperature": 0.3, "max_output_tokens": 1024},
-        )
+        if Config.LLM_PROVIDER == "openai" and Config.OPENAI_API_KEY:
+            # ---- OpenAI chat ----
+            from openai import OpenAI
+            client = OpenAI(api_key=Config.OPENAI_API_KEY)
 
-        # Build conversation
-        parts = [system_prompt]
-        for h in history[-6:]:
-            role = h.get("role", "user")
-            parts.append(f"{role}: {h.get('content', '')}")
-        parts.append(f"user: {question}")
+            messages = [{"role": "system", "content": system_prompt}]
+            for h in history[-6:]:
+                messages.append({"role": h.get("role", "user"), "content": h.get("content", "")})
+            messages.append({"role": "user", "content": question})
 
-        response = model.generate_content("\n\n".join(parts))
-        answer = response.text.strip()
+            response = client.chat.completions.create(
+                model=Config.OPENAI_MODEL,
+                messages=messages,
+                temperature=0.3,
+                max_tokens=1024,
+            )
+            answer = response.choices[0].message.content.strip()
+        else:
+            # ---- Gemini chat (fallback) ----
+            import google.generativeai as genai
+            from google.generativeai.types import HarmCategory, HarmBlockThreshold
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash",
+                generation_config={"temperature": 0.3, "max_output_tokens": 1024},
+            )
+
+            parts = [system_prompt]
+            for h in history[-6:]:
+                role = h.get("role", "user")
+                parts.append(f"{role}: {h.get('content', '')}")
+            parts.append(f"user: {question}")
+
+            safety_settings = {
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+            }
+
+            response = model.generate_content(
+                "\n\n".join(parts),
+                safety_settings=safety_settings,
+            )
+
+            if not response.candidates or not response.candidates[0].content.parts:
+                answer = "I couldn't generate a response for that query. Please try rephrasing your question about the claim."
+            else:
+                answer = response.text.strip()
 
         return JSONResponse(content={"answer": answer})
 

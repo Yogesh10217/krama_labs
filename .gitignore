@@ -13,9 +13,16 @@ env/
 # Uploads & Results (runtime data)
 backend/uploads/
 backend/results/
+uploads/
+results/
 
-# YC Application (private)
-YC_APPLICATION.md
+# Markdown files (except README)
+*.md
+!README.md
+
+# Demo & test files
+demo.html
+test_docs/
 
 # IDE
 .vscode/
