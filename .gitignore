@@ -34,3 +34,17 @@ test_docs/
 Thumbs.db
 .DS_Store
 .vercel
+
+# ML Model caches (PaddleOCR, etc.)
+~/.paddleocr/
+inference/
+*.pdparams
+*.pdmodel
+
+# Test artefacts
+.pytest_cache/
+backend/.pytest_cache/
+*.egg-info/
+
+# Runtime data files
+backend/demo_requests.json

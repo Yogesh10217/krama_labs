@@ -1,8 +1,6 @@
 """PaddleOCR engine for text extraction."""
 
 import os
-import cv2
-import numpy as np
 from PIL import Image
 from typing import List
 
@@ -10,13 +8,21 @@ from typing import List
 os.environ.setdefault("FLAGS_enable_pir_api", "0")
 os.environ.setdefault("FLAGS_enable_pir_in_executor", "0")
 
+HAS_CV2_NUMPY = False
+try:
+    import cv2
+    import numpy as np
+    HAS_CV2_NUMPY = True
+except ImportError:
+    pass
+
 try:
     import torch
     HAS_GPU = torch.cuda.is_available()
 except Exception:
     HAS_GPU = False
 
-from models import BoundingBox, OCRRegion
+from app.models import BoundingBox, OCRRegion
 
 
 class PaddleOCREngine:
@@ -33,7 +39,11 @@ class PaddleOCREngine:
     def __init__(self, lang: str = "en"):
         if self._init:
             return
-        from paddleocr import PaddleOCR
+            
+        try:
+            from paddleocr import PaddleOCR
+        except ImportError:
+            raise ImportError("paddleocr is not installed. Please install it using requirements-ml.txt.")
 
         # PaddleOCR v3.x changed parameter names
         try:
@@ -62,6 +72,9 @@ class PaddleOCREngine:
         print(f"  PaddleOCR ready (API: {'predict()' if self._use_new_api else 'ocr()'}, GPU: {HAS_GPU})")
 
     def _to_cv2(self, image):
+        if not HAS_CV2_NUMPY:
+            raise ImportError("opencv-python and numpy are required for processing images with OCR.")
+            
         if isinstance(image, str):
             return cv2.imread(image)
         elif isinstance(image, Image.Image):
@@ -72,6 +85,9 @@ class PaddleOCREngine:
         return image
 
     def extract(self, image, page_num: int = 0) -> List[OCRRegion]:
+        if not HAS_CV2_NUMPY:
+            raise ImportError("opencv-python and numpy are required for processing images with OCR.")
+            
         img_cv2 = self._to_cv2(image)
         regions = []
 
