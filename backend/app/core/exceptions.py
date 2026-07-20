@@ -49,6 +49,19 @@ class ServiceUnavailableException(KramaException):
         super().__init__(message, code, status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
+class ConflictException(KramaException):
+    """Raised for resource conflicts, e.g. duplicate unique keys."""
+    def __init__(self, message: str, code: str = "CONFLICT"):
+        super().__init__(message, code, status.HTTP_409_CONFLICT)
+
+
+class ForbiddenException(KramaException):
+    """Raised when access to a resource is forbidden."""
+    def __init__(self, message: str, code: str = "FORBIDDEN"):
+        super().__init__(message, code, status.HTTP_403_FORBIDDEN)
+
+
+
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""
     return JSONResponse(

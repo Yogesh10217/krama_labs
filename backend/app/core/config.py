@@ -64,8 +64,13 @@ class Config:
     # Grounding
     FUZZY_MATCH_THRESHOLD: int = int(os.getenv("FUZZY_MATCH_THRESHOLD", "75"))
 
+    # Database Settings
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./krama_dev.db")
+    DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "False").lower() in ("true", "1", "yes")
+    DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "5"))
+    DB_MAX_OVERFLOW: int = int(os.getenv("DB_MAX_OVERFLOW", "10"))
+
     # Optional future credentials (placeholders)
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
     REDIS_URL: str = os.getenv("REDIS_URL", "")
     OBJECT_STORAGE_ENDPOINT: str = os.getenv("OBJECT_STORAGE_ENDPOINT", "")
 
