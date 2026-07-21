@@ -61,6 +61,75 @@ class ForbiddenException(KramaException):
         super().__init__(message, code, status.HTTP_403_FORBIDDEN)
 
 
+# ─── Phase 2: Ingestion-specific exceptions ───────────────────────────────────
+
+class UnsupportedFileTypeException(KramaException):
+    """Raised when an uploaded file has an unsupported type."""
+    def __init__(self, message: str):
+        super().__init__(message, "UNSUPPORTED_FILE_TYPE", status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+
+class FileTooLargeException(KramaException):
+    """Raised when an uploaded file exceeds the maximum allowed size."""
+    def __init__(self, message: str):
+        super().__init__(message, "FILE_TOO_LARGE", status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
+
+
+class EmptyFileException(KramaException):
+    """Raised when an uploaded file contains zero bytes."""
+    def __init__(self, message: str = "Uploaded file is empty."):
+        super().__init__(message, "EMPTY_FILE", status.HTTP_400_BAD_REQUEST)
+
+
+class InvalidFileSignatureException(KramaException):
+    """Raised when the file's magic bytes do not match expected signatures."""
+    def __init__(self, message: str):
+        super().__init__(message, "INVALID_FILE_SIGNATURE", status.HTTP_400_BAD_REQUEST)
+
+
+class ContentTypeMismatchException(KramaException):
+    """Raised when declared MIME type strongly conflicts with extension and signature."""
+    def __init__(self, message: str):
+        super().__init__(message, "CONTENT_TYPE_MISMATCH", status.HTTP_400_BAD_REQUEST)
+
+
+class InvalidFilenameException(KramaException):
+    """Raised when the uploaded filename is invalid or unsafe."""
+    def __init__(self, message: str):
+        super().__init__(message, "INVALID_FILENAME", status.HTTP_400_BAD_REQUEST)
+
+
+class DuplicateDocumentException(KramaException):
+    """Raised when a document with the same checksum already exists in the same claim."""
+    def __init__(self, message: str, existing_document_id: str | None = None):
+        super().__init__(message, "DUPLICATE_DOCUMENT", status.HTTP_409_CONFLICT)
+        self.existing_document_id = existing_document_id
+
+
+class BatchLimitExceededException(KramaException):
+    """Raised when a batch upload exceeds the configured file or size limit."""
+    def __init__(self, message: str):
+        super().__init__(message, "BATCH_LIMIT_EXCEEDED", status.HTTP_400_BAD_REQUEST)
+
+
+class StorageUnavailableException(KramaException):
+    """Raised when the storage provider cannot be reached or initialised."""
+    def __init__(self, message: str):
+        super().__init__(message, "STORAGE_UNAVAILABLE", status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+class StorageWriteFailedException(KramaException):
+    """Raised when the storage provider fails to write an object."""
+    def __init__(self, message: str):
+        super().__init__(message, "STORAGE_WRITE_FAILED", status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+class DocumentContentNotFoundException(KramaException):
+    """Raised when a document's content is not found in storage."""
+    def __init__(self, message: str = "Document content not found in storage."):
+        super().__init__(message, "DOCUMENT_CONTENT_NOT_FOUND", status.HTTP_404_NOT_FOUND)
+
+
 
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""

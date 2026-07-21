@@ -70,6 +70,33 @@ class Config:
     DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "5"))
     DB_MAX_OVERFLOW: int = int(os.getenv("DB_MAX_OVERFLOW", "10"))
 
+    # ─── Phase 2: Storage Provider ───────────────────────────────────────────────
+    # STORAGE_PROVIDER: which provider to use. Only "local" is active.
+    STORAGE_PROVIDER: str = os.getenv("STORAGE_PROVIDER", "local")
+    # STORAGE_ROOT: base directory for local filesystem storage (provider-neutral key prefix).
+    # IMPORTANT: In Docker/production, mount a persistent volume here.
+    # Do not rely on ephemeral container storage.
+    STORAGE_ROOT: str = os.getenv("STORAGE_ROOT", "./storage")
+
+    # ─── Phase 2: Upload Limits ──────────────────────────────────────────────────
+    # Maximum size per individual uploaded file (in MB).
+    MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
+    # Maximum number of files accepted in a single batch upload request.
+    MAX_BATCH_FILES: int = int(os.getenv("MAX_BATCH_FILES", "20"))
+    # Maximum combined uncompressed size of all files in a batch (in MB).
+    MAX_BATCH_TOTAL_SIZE_MB: int = int(os.getenv("MAX_BATCH_TOTAL_SIZE_MB", "500"))
+    # Chunk size for streaming uploads in bytes (default 1 MB).
+    UPLOAD_CHUNK_SIZE_BYTES: int = int(os.getenv("UPLOAD_CHUNK_SIZE_BYTES", "1048576"))
+
+    # Derived bytes limits (not overridable separately, computed from MB settings).
+    @classmethod
+    def max_upload_size_bytes(cls) -> int:
+        return cls.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+
+    @classmethod
+    def max_batch_total_size_bytes(cls) -> int:
+        return cls.MAX_BATCH_TOTAL_SIZE_MB * 1024 * 1024
+
     # Optional future credentials (placeholders)
     REDIS_URL: str = os.getenv("REDIS_URL", "")
     OBJECT_STORAGE_ENDPOINT: str = os.getenv("OBJECT_STORAGE_ENDPOINT", "")

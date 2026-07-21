@@ -16,6 +16,11 @@ backend/results/
 uploads/
 results/
 
+# Phase 2: Storage root (raw uploaded files — must not be committed)
+# Mount a persistent volume in production instead.
+backend/storage/
+storage/
+
 # Markdown files (except README)
 *.md
 !README.md
