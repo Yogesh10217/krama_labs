@@ -196,7 +196,15 @@ class DocumentContentNotFoundException(KramaException):
         super().__init__(message, "DOCUMENT_CONTENT_NOT_FOUND", status.HTTP_404_NOT_FOUND)
 
 
+class DocumentNotReadyForOCR(KramaException):
+    def __init__(self, message: str = "Document is not ready for OCR"):
+        super().__init__(message, "DOCUMENT_NOT_READY_FOR_OCR", status.HTTP_400_BAD_REQUEST)
 
+
+class OCRProviderUnavailableException(ServiceUnavailableException):
+    """Raised when the OCR provider is not installed or unavailable."""
+    def __init__(self, message: str = "Configured OCR provider is not available."):
+        super().__init__(message, "OCR_PROVIDER_UNAVAILABLE")
 
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""

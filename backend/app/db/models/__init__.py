@@ -6,3 +6,5 @@ from app.db.models.document import Document
 from app.db.models.page import Page
 from app.db.models.job import Job
 from app.db.models.job_stage import JobStage
+from app.db.models.ocr import OCRPageResult, OCRRegion
+

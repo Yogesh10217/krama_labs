@@ -72,6 +72,13 @@ class Config:
     LOW_CONFIDENCE: float = float(os.getenv("LOW_CONFIDENCE", "0.50"))
     FLAG_THRESHOLD: float = float(os.getenv("FLAG_THRESHOLD", "0.60"))
 
+    # Phase 4: OCR Configuration
+    OCR_PROVIDER: str = os.getenv("OCR_PROVIDER", "paddle")
+    OCR_LANG: str = os.getenv("OCR_LANG", "en")
+    OCR_USE_GPU: bool = os.getenv("OCR_USE_GPU", "False").lower() in ("true", "1", "yes")
+    OCR_MIN_CONFIDENCE: float = float(os.getenv("OCR_MIN_CONFIDENCE", "0.0"))
+
+
     # Grounding
     FUZZY_MATCH_THRESHOLD: int = int(os.getenv("FUZZY_MATCH_THRESHOLD", "75"))
 

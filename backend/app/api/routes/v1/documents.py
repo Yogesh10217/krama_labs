@@ -45,6 +45,9 @@ from app.services.conversion_service import ConversionService
 from app.repositories.page import PageRepository
 from app.storage.base import StorageNotFoundError
 from app.storage.factory import get_storage_provider
+from app.services.ocr_service import OCRService
+from app.ocr.schemas import DocumentOCRSummaryResponse
+
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -389,4 +392,28 @@ def list_document_pages(
     return PageListResponse(
         pages=[PageResponse.model_validate(p) for p in pages]
     )
+
+
+# ─── Phase 4: Document OCR ───────────────────────────────────────────────────
+
+@router.post(
+    "/documents/{document_id}/ocr",
+    response_model=DocumentOCRSummaryResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Synchronously run OCR on all document pages",
+    tags=["Document OCR"],
+)
+def run_document_ocr(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Run OCR on all unprocessed pages of a document.
+    
+    Supports partial retries.
+    """
+    storage = get_storage_provider()
+    service = OCRService(db=db, storage=storage)
+    result = service.process_document(org.id, document_id)
+    return DocumentOCRSummaryResponse(**result)
 
