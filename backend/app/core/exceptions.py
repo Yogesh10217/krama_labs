@@ -124,10 +124,77 @@ class StorageWriteFailedException(KramaException):
         super().__init__(message, "STORAGE_WRITE_FAILED", status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
+class DocumentNotReadyForConversion(KramaException):
+    """Raised when trying to convert a document that is not in a valid state (e.g. not UPLOADED/CONVERSION_FAILED)."""
+    def __init__(self, message: str):
+        super().__init__(message, "DOCUMENT_NOT_READY_FOR_CONVERSION", status.HTTP_400_BAD_REQUEST)
+
+
+class DocumentAlreadyConverting(KramaException):
+    """Raised when trying to convert a document that is currently in CONVERTING status."""
+    def __init__(self, message: str):
+        super().__init__(message, "DOCUMENT_ALREADY_CONVERTING", status.HTTP_409_CONFLICT)
+
+
+class UnsupportedConversionFormat(KramaException):
+    """Raised when the document format has no registered converter."""
+    def __init__(self, message: str):
+        super().__init__(message, "UNSUPPORTED_CONVERSION_FORMAT", status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+
+class ConversionFailed(KramaException):
+    """Raised when the conversion engine fails to process a document or page."""
+    def __init__(self, message: str):
+        super().__init__(message, "CONVERSION_FAILED", status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CorruptedDocument(KramaException):
+    """Raised when the document is malformed or corrupted and cannot be opened."""
+    def __init__(self, message: str):
+        super().__init__(message, "CORRUPTED_DOCUMENT", status.HTTP_400_BAD_REQUEST)
+
+
+class EncryptedDocument(KramaException):
+    """Raised when the document is password-protected or encrypted."""
+    def __init__(self, message: str):
+        super().__init__(message, "ENCRYPTED_DOCUMENT", status.HTTP_400_BAD_REQUEST)
+
+
+class DocumentPageLimitExceeded(KramaException):
+    """Raised when the page count exceeds the configured maximum page limit."""
+    def __init__(self, message: str):
+        super().__init__(message, "DOCUMENT_PAGE_LIMIT_EXCEEDED", status.HTTP_400_BAD_REQUEST)
+
+
+class PageDimensionLimitExceeded(KramaException):
+    """Raised when a single page's width or height exceeds limits."""
+    def __init__(self, message: str):
+        super().__init__(message, "PAGE_DIMENSION_LIMIT_EXCEEDED", status.HTTP_400_BAD_REQUEST)
+
+
+class PagePixelLimitExceeded(KramaException):
+    """Raised when a single page's total pixels exceed maximum limit (decompression bomb protection)."""
+    def __init__(self, message: str):
+        super().__init__(message, "PAGE_PIXEL_LIMIT_EXCEEDED", status.HTTP_400_BAD_REQUEST)
+
+
+class PageArtifactMissing(KramaException):
+    """Raised when a page record exists but its physical PNG file is missing from storage."""
+    def __init__(self, message: str):
+        super().__init__(message, "PAGE_ARTIFACT_MISSING", status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ConversionStateInconsistent(KramaException):
+    """Raised when a document is marked as converted but page counts or records don't match."""
+    def __init__(self, message: str):
+        super().__init__(message, "CONVERSION_STATE_INCONSISTENT", status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class DocumentContentNotFoundException(KramaException):
     """Raised when a document's content is not found in storage."""
     def __init__(self, message: str = "Document content not found in storage."):
         super().__init__(message, "DOCUMENT_CONTENT_NOT_FOUND", status.HTTP_404_NOT_FOUND)
+
 
 
 

@@ -22,6 +22,10 @@ class Config:
     # Server settings
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
+
+    # Legacy Directories
+    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "./uploads")
+    RESULTS_DIR: str = os.getenv("RESULTS_DIR", "./results")
     
     # CORS settings (expects a JSON array string, e.g. '["http://localhost:3000"]')
     _cors_str = os.getenv("CORS_ORIGINS")
@@ -33,11 +37,18 @@ class Config:
     else:
         CORS_ORIGINS = ["*"]
 
-    # File and upload limits
-    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "uploads")
-    RESULTS_DIR: str = os.getenv("RESULTS_DIR", "results")
-    MAX_FILE_SIZE_MB: int = int(os.getenv("MAX_FILE_SIZE_MB", "20"))
-    MAX_UPLOAD_SIZE: int = MAX_FILE_SIZE_MB * 1024 * 1024  # In bytes
+    # Phase 2: Ingestion & Upload
+    MAX_UPLOAD_SIZE_MB: int = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
+    MAX_BATCH_FILES: int = int(os.getenv("MAX_BATCH_FILES", "20"))
+    MAX_BATCH_TOTAL_SIZE_MB: int = int(os.getenv("MAX_BATCH_TOTAL_SIZE_MB", "100"))
+    UPLOAD_CHUNK_SIZE_BYTES: int = 1024 * 1024  # 1 MB chunk
+
+    # Phase 3: Document Conversion & Limits
+    MAX_DOCUMENT_PAGES: int = int(os.getenv("MAX_DOCUMENT_PAGES", "500"))
+    MAX_PAGE_WIDTH: int = int(os.getenv("MAX_PAGE_WIDTH", "20000"))
+    MAX_PAGE_HEIGHT: int = int(os.getenv("MAX_PAGE_HEIGHT", "20000"))
+    MAX_PAGE_PIXELS: int = int(os.getenv("MAX_PAGE_PIXELS", "100000000")) # 100M pixels
+    PDF_RENDER_DPI: int = int(os.getenv("PDF_RENDER_DPI", "200"))
 
     # API Keys & LLM Settings
     GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")

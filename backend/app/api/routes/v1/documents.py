@@ -38,8 +38,11 @@ from app.schemas.ingestion import (
     UploadedDocumentResponse,
     UploadedJobResponse,
 )
+from app.schemas.page import ConversionResponse, PageResponse, PageListResponse
 from app.services.document_service import DocumentService
 from app.services.ingestion_service import IngestionService
+from app.services.conversion_service import ConversionService
+from app.repositories.page import PageRepository
 from app.storage.base import StorageNotFoundError
 from app.storage.factory import get_storage_provider
 
@@ -317,3 +320,73 @@ def get_document_content(
             "Content-Disposition": f'attachment; filename="{safe_name}"',
         },
     )
+
+
+# ─── Phase 3: Document Conversion & Page Listing ─────────────────────────────
+
+@router.post(
+    "/documents/{document_id}/convert",
+    response_model=ConversionResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Synchronously convert document to canonical page images",
+    tags=["Document Conversion"],
+)
+def convert_document(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Trigger synchronous rendering of raw document into canonical PNG pages.
+
+    **Note:** This endpoint executes synchronously for development and testing. 
+    In production, this will run asynchronously via background workers.
+
+    **Behavior:**
+    - Checks document status (must be UPLOADED or CONVERSION_FAILED).
+    - Downloads raw content, renders PDF pages or decodes image frames.
+    - Saves rendered PNG pages to object storage (processed/ namespace).
+    - Creates database Page records.
+    - Updates document status to CONVERTED and advances the CONVERT job stage.
+    """
+    storage = get_storage_provider()
+    service = ConversionService(db=db, storage=storage)
+    pages = service.convert_document(org.id, document_id)
+
+    # Fetch document to get fresh status and page count
+    doc_service = DocumentService(db)
+    doc = doc_service.get_document(document_id, org.id)
+
+    return ConversionResponse(
+        document_id=doc.id,
+        status=doc.status,
+        page_count=doc.page_count or 0,
+        pages=[PageResponse.model_validate(p) for p in pages],
+    )
+
+
+@router.get(
+    "/documents/{document_id}/pages",
+    response_model=PageListResponse,
+    summary="List all materialized pages for a document",
+    tags=["Document Conversion"],
+)
+def list_document_pages(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Retrieve metadata of all pages materialized for a document.
+
+    **Security:** Tenant-isolated (requires valid X-Organization-ID).
+    """
+    # Verify document exists and belongs to the org
+    doc_service = DocumentService(db)
+    doc_service.get_document(document_id, org.id)
+
+    page_repo = PageRepository(db)
+    pages = page_repo.list_by_document_and_org(document_id, org.id)
+
+    return PageListResponse(
+        pages=[PageResponse.model_validate(p) for p in pages]
+    )
+
