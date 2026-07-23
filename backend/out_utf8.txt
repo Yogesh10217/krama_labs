@@ -1,0 +1,274 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.4, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\Yogesh E\OneDrive\Desktop\Karma Ai\krama_labs\backend
+plugins: anyio-4.3.0
+collected 1 item
+
+tests\test_integration_e2e.py F                                          [100%]
+
+================================== FAILURES ===================================
+_________________ TestIntegrationE2E.test_e2e_multiframe_tiff _________________
+
+self = <tests.test_integration_e2e.TestIntegrationE2E object at 0x0000022F43624F80>
+client = <starlette.testclient.TestClient object at 0x0000022F4221EF00>
+test_org = <app.db.models.organization.Organization object at 0x0000022F4370B920>
+db_session = <sqlalchemy.orm.session.Session object at 0x0000022F4370B8C0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000022F437EB0E0>
+
+    def test_e2e_multiframe_tiff(self, client, test_org, db_session, monkeypatch):
+        paddle_installed = True
+        try:
+            import paddle
+        except ImportError:
+            paddle_installed = False
+    
+        if not paddle_installed:
+            from tests.fakes.fake_ocr_engine import FakeOCREngine
+            fake_engine = FakeOCREngine()
+            monkeypatch.setattr("app.core.config.Config.OCR_PROVIDER", "fake", raising=False)
+            monkeypatch.setattr("app.ocr.registry._create_engine", lambda p: fake_engine)
+    
+        tiff_bytes = create_multiframe_tiff()
+    
+        # 1. Create Claim
+        claim_res = client.post("/api/v1/claims", json={"title": "E2E TIFF Claim"}, headers={"X-Organization-ID": str(test_org.id)})
+>       assert claim_res.status_code == 200
+E       assert 201 == 200
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests\test_integration_e2e.py:152: AssertionError
+---------------------------- Captured stderr setup ----------------------------
+[2026-07-23 20:20:56,005] [INFO] [-] [app.main:82] Mounted static frontend from C:\Users\Yogesh E\OneDrive\Desktop\Karma Ai\krama_labs
+[2026-07-23 20:20:56,016] [DEBUG] [-] [asyncio:634] Using proactor: IocpProactor
+[2026-07-23 20:20:56,018] [INFO] [-] [app.main:29] Starting Krama AI Backend (env: development, debug: True)
+---------------------------- Captured stderr call -----------------------------
+[2026-07-23 20:20:56,070] [DEBUG] [-] [PIL.Image:376] Importing BlpImagePlugin
+[2026-07-23 20:20:56,072] [DEBUG] [-] [PIL.Image:376] Importing BmpImagePlugin
+[2026-07-23 20:20:56,072] [DEBUG] [-] [PIL.Image:376] Importing BufrStubImagePlugin
+[2026-07-23 20:20:56,074] [DEBUG] [-] [PIL.Image:376] Importing CurImagePlugin
+[2026-07-23 20:20:56,075] [DEBUG] [-] [PIL.Image:376] Importing DcxImagePlugin
+[2026-07-23 20:20:56,077] [DEBUG] [-] [PIL.Image:376] Importing DdsImagePlugin
+[2026-07-23 20:20:56,080] [DEBUG] [-] [PIL.Image:376] Importing EpsImagePlugin
+[2026-07-23 20:20:56,083] [DEBUG] [-] [PIL.Image:376] Importing FitsImagePlugin
+[2026-07-23 20:20:56,087] [DEBUG] [-] [PIL.Image:376] Importing FliImagePlugin
+[2026-07-23 20:20:56,088] [DEBUG] [-] [PIL.Image:376] Importing FpxImagePlugin
+[2026-07-23 20:20:56,091] [DEBUG] [-] [PIL.Image:379] Image: failed to import FpxImagePlugin: No module named 'olefile'
+[2026-07-23 20:20:56,091] [DEBUG] [-] [PIL.Image:376] Importing FtexImagePlugin
+[2026-07-23 20:20:56,092] [DEBUG] [-] [PIL.Image:376] Importing GbrImagePlugin
+[2026-07-23 20:20:56,093] [DEBUG] [-] [PIL.Image:376] Importing GifImagePlugin
+[2026-07-23 20:20:56,093] [DEBUG] [-] [PIL.Image:376] Importing GribStubImagePlugin
+[2026-07-23 20:20:56,094] [DEBUG] [-] [PIL.Image:376] Importing Hdf5StubImagePlugin
+[2026-07-23 20:20:56,095] [DEBUG] [-] [PIL.Image:376] Importing IcnsImagePlugin
+[2026-07-23 20:20:56,100] [DEBUG] [-] [PIL.Image:376] Importing IcoImagePlugin
+[2026-07-23 20:20:56,101] [DEBUG] [-] [PIL.Image:376] Importing ImImagePlugin
+[2026-07-23 20:20:56,102] [DEBUG] [-] [PIL.Image:376] Importing ImtImagePlugin
+[2026-07-23 20:20:56,103] [DEBUG] [-] [PIL.Image:376] Importing IptcImagePlugin
+[2026-07-23 20:20:56,104] [DEBUG] [-] [PIL.Image:376] Importing JpegImagePlugin
+[2026-07-23 20:20:56,104] [DEBUG] [-] [PIL.Image:376] Importing Jpeg2KImagePlugin
+[2026-07-23 20:20:56,104] [DEBUG] [-] [PIL.Image:376] Importing McIdasImagePlugin
+[2026-07-23 20:20:56,106] [DEBUG] [-] [PIL.Image:376] Importing MicImagePlugin
+[2026-07-23 20:20:56,108] [DEBUG] [-] [PIL.Image:379] Image: failed to import MicImagePlugin: No module named 'olefile'
+[2026-07-23 20:20:56,108] [DEBUG] [-] [PIL.Image:376] Importing MpegImagePlugin
+[2026-07-23 20:20:56,109] [DEBUG] [-] [PIL.Image:376] Importing MpoImagePlugin
+[2026-07-23 20:20:56,112] [DEBUG] [-] [PIL.Image:376] Importing MspImagePlugin
+[2026-07-23 20:20:56,112] [DEBUG] [-] [PIL.Image:376] Importing PalmImagePlugin
+[2026-07-23 20:20:56,116] [DEBUG] [-] [PIL.Image:376] Importing PcdImagePlugin
+[2026-07-23 20:20:56,118] [DEBUG] [-] [PIL.Image:376] Importing PcxImagePlugin
+[2026-07-23 20:20:56,118] [DEBUG] [-] [PIL.Image:376] Importing PdfImagePlugin
+[2026-07-23 20:20:56,124] [DEBUG] [-] [PIL.Image:376] Importing PixarImagePlugin
+[2026-07-23 20:20:56,126] [DEBUG] [-] [PIL.Image:376] Importing PngImagePlugin
+[2026-07-23 20:20:56,126] [DEBUG] [-] [PIL.Image:376] Importing PpmImagePlugin
+[2026-07-23 20:20:56,126] [DEBUG] [-] [PIL.Image:376] Importing PsdImagePlugin
+[2026-07-23 20:20:56,127] [DEBUG] [-] [PIL.Image:376] Importing QoiImagePlugin
+[2026-07-23 20:20:56,128] [DEBUG] [-] [PIL.Image:376] Importing SgiImagePlugin
+[2026-07-23 20:20:56,129] [DEBUG] [-] [PIL.Image:376] Importing SpiderImagePlugin
+[2026-07-23 20:20:56,134] [DEBUG] [-] [PIL.Image:376] Importing SunImagePlugin
+[2026-07-23 20:20:56,135] [DEBUG] [-] [PIL.Image:376] Importing TgaImagePlugin
+[2026-07-23 20:20:56,136] [DEBUG] [-] [PIL.Image:376] Importing TiffImagePlugin
+[2026-07-23 20:20:56,137] [DEBUG] [-] [PIL.Image:376] Importing WebPImagePlugin
+[2026-07-23 20:20:56,141] [DEBUG] [-] [PIL.Image:376] Importing WmfImagePlugin
+[2026-07-23 20:20:56,143] [DEBUG] [-] [PIL.Image:376] Importing XbmImagePlugin
+[2026-07-23 20:20:56,145] [DEBUG] [-] [PIL.Image:376] Importing XpmImagePlugin
+[2026-07-23 20:20:56,149] [DEBUG] [-] [PIL.Image:376] Importing XVThumbImagePlugin
+[2026-07-23 20:20:56,151] [DEBUG] [-] [PIL.TiffImagePlugin:1643] Tiffinfo Keys: []
+[2026-07-23 20:20:56,151] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 256, Type: 4, Value: 100
+[2026-07-23 20:20:56,151] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: ImageWidth (256) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 257, Type: 4, Value: 100
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: ImageLength (257) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 258, Type: 3, Value: (8, 8, 8)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: BitsPerSample (258) - type: short (3) - value: (8, 8, 8)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 259, Type: 3, Value: 1
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: Compression (259) - type: short (3) - value: (1,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 262, Type: 3, Value: 2
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: PhotometricInterpretation (262) - type: short (3) - value: (2,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 273, Type: 4, Value: (0,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: StripOffsets (273) - type: long (4) - value: (0,)
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 277, Type: 3, Value: 3
+[2026-07-23 20:20:56,152] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: SamplesPerPixel (277) - type: short (3) - value: (3,)
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 278, Type: 4, Value: 100
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: RowsPerStrip (278) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 279, Type: 4, Value: (30000,)
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: StripByteCounts (279) - type: long (4) - value: (30000,)
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 284, Type: 3, Value: 1
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: PlanarConfiguration (284) - type: short (3) - value: (1,)
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 256 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 257 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 258 3 3 b'\x86\x00\x00\x00' b'\x08\x00\x08\x00\x08\x00'
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 259 3 1 b'\x01\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 262 3 1 b'\x02\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 273 4 1 b'\x8c\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 277 3 1 b'\x03\x00\x00\x00' b''
+[2026-07-23 20:20:56,153] [DEBUG] [-] [PIL.TiffImagePlugin:956] 278 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:956] 279 4 1 b'0u\x00\x00' b''
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:956] 284 3 1 b'\x01\x00\x00\x00' b''
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:1643] Tiffinfo Keys: []
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 256, Type: 4, Value: 100
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: ImageWidth (256) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,154] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 257, Type: 4, Value: 100
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: ImageLength (257) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 258, Type: 3, Value: (8, 8, 8)
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: BitsPerSample (258) - type: short (3) - value: (8, 8, 8)
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 259, Type: 3, Value: 1
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: Compression (259) - type: short (3) - value: (1,)
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 262, Type: 3, Value: 2
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: PhotometricInterpretation (262) - type: short (3) - value: (2,)
+[2026-07-23 20:20:56,155] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 273, Type: 4, Value: (0,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: StripOffsets (273) - type: long (4) - value: (0,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 277, Type: 3, Value: 3
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: SamplesPerPixel (277) - type: short (3) - value: (3,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 278, Type: 4, Value: 100
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: RowsPerStrip (278) - type: long (4) - value: (100,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 279, Type: 4, Value: (30000,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: StripByteCounts (279) - type: long (4) - value: (30000,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:907] Tag 284, Type: 3, Value: 1
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:929] save: PlanarConfiguration (284) - type: short (3) - value: (1,)
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:956] 256 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,156] [DEBUG] [-] [PIL.TiffImagePlugin:956] 257 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 258 3 3 b'\x86\x00\x00\x00' b'\x08\x00\x08\x00\x08\x00'
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 259 3 1 b'\x01\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 262 3 1 b'\x02\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 273 4 1 b'\x8c\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 277 3 1 b'\x03\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 278 4 1 b'd\x00\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 279 4 1 b'0u\x00\x00' b''
+[2026-07-23 20:20:56,157] [DEBUG] [-] [PIL.TiffImagePlugin:956] 284 3 1 b'\x01\x00\x00\x00' b''
+[2026-07-23 20:20:56,172] [INFO] [-] [httpx:1026] HTTP Request: POST http://testserver/api/v1/claims "HTTP/1.1 201 Created"
+------------------------------ Captured log call ------------------------------
+DEBUG    PIL.Image:Image.py:376 Importing BlpImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing BmpImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing BufrStubImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing CurImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing DcxImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing DdsImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing EpsImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing FitsImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing FliImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing FpxImagePlugin
+DEBUG    PIL.Image:Image.py:379 Image: failed to import FpxImagePlugin: No module named 'olefile'
+DEBUG    PIL.Image:Image.py:376 Importing FtexImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing GbrImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing GifImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing GribStubImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing Hdf5StubImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing IcnsImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing IcoImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing ImImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing ImtImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing IptcImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing JpegImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing Jpeg2KImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing McIdasImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing MicImagePlugin
+DEBUG    PIL.Image:Image.py:379 Image: failed to import MicImagePlugin: No module named 'olefile'
+DEBUG    PIL.Image:Image.py:376 Importing MpegImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing MpoImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing MspImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PalmImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PcdImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PcxImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PdfImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PixarImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PngImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PpmImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing PsdImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing QoiImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing SgiImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing SpiderImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing SunImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing TgaImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing TiffImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing WebPImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing WmfImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing XbmImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing XpmImagePlugin
+DEBUG    PIL.Image:Image.py:376 Importing XVThumbImagePlugin
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:1643 Tiffinfo Keys: []
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 256, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: ImageWidth (256) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 257, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: ImageLength (257) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 258, Type: 3, Value: (8, 8, 8)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: BitsPerSample (258) - type: short (3) - value: (8, 8, 8)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 259, Type: 3, Value: 1
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: Compression (259) - type: short (3) - value: (1,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 262, Type: 3, Value: 2
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: PhotometricInterpretation (262) - type: short (3) - value: (2,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 273, Type: 4, Value: (0,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: StripOffsets (273) - type: long (4) - value: (0,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 277, Type: 3, Value: 3
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: SamplesPerPixel (277) - type: short (3) - value: (3,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 278, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: RowsPerStrip (278) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 279, Type: 4, Value: (30000,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: StripByteCounts (279) - type: long (4) - value: (30000,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 284, Type: 3, Value: 1
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: PlanarConfiguration (284) - type: short (3) - value: (1,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 256 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 257 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 258 3 3 b'\x86\x00\x00\x00' b'\x08\x00\x08\x00\x08\x00'
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 259 3 1 b'\x01\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 262 3 1 b'\x02\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 273 4 1 b'\x8c\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 277 3 1 b'\x03\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 278 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 279 4 1 b'0u\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 284 3 1 b'\x01\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:1643 Tiffinfo Keys: []
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 256, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: ImageWidth (256) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 257, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: ImageLength (257) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 258, Type: 3, Value: (8, 8, 8)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: BitsPerSample (258) - type: short (3) - value: (8, 8, 8)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 259, Type: 3, Value: 1
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: Compression (259) - type: short (3) - value: (1,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 262, Type: 3, Value: 2
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: PhotometricInterpretation (262) - type: short (3) - value: (2,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 273, Type: 4, Value: (0,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: StripOffsets (273) - type: long (4) - value: (0,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 277, Type: 3, Value: 3
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: SamplesPerPixel (277) - type: short (3) - value: (3,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 278, Type: 4, Value: 100
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: RowsPerStrip (278) - type: long (4) - value: (100,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 279, Type: 4, Value: (30000,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: StripByteCounts (279) - type: long (4) - value: (30000,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:907 Tag 284, Type: 3, Value: 1
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:929 save: PlanarConfiguration (284) - type: short (3) - value: (1,)
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 256 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 257 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 258 3 3 b'\x86\x00\x00\x00' b'\x08\x00\x08\x00\x08\x00'
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 259 3 1 b'\x01\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 262 3 1 b'\x02\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 273 4 1 b'\x8c\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 277 3 1 b'\x03\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 278 4 1 b'd\x00\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 279 4 1 b'0u\x00\x00' b''
+DEBUG    PIL.TiffImagePlugin:TiffImagePlugin.py:956 284 3 1 b'\x01\x00\x00\x00' b''
+INFO     httpx:_client.py:1026 HTTP Request: POST http://testserver/api/v1/claims "HTTP/1.1 201 Created"
+-------------------------- Captured stderr teardown ---------------------------
+[2026-07-23 20:20:56,474] [INFO] [-] [app.main:37] Stopping Krama AI Backend
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:37 Stopping Krama AI Backend
+=========================== short test summary info ===========================
+FAILED tests/test_integration_e2e.py::TestIntegrationE2E::test_e2e_multiframe_tiff
+============================== 1 failed in 0.55s ==============================

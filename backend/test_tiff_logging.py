@@ -1,0 +1,17 @@
+import io
+import logging
+from PIL import Image
+
+logging.basicConfig(level=logging.DEBUG)
+
+def create_multiframe_tiff():
+    out = io.BytesIO()
+    img1 = Image.new("RGB", (100, 100), color="red")
+    img2 = Image.new("RGB", (100, 100), color="blue")
+    img1.save(out, format="TIFF", save_all=True, append_images=[img2])
+    out.seek(0)
+    return out.read()
+
+data = create_multiframe_tiff()
+img = Image.open(io.BytesIO(data))
+print(f"Successfully opened BytesIO! Format: {img.format}, Size: {img.size}")

@@ -185,7 +185,7 @@ class ConversionService:
                     page_number=page_num,
                     width=converted_page.width,
                     height=converted_page.height,
-                    status=PageStatus.PROCESSED,
+                    status=PageStatus.MATERIALIZED,
                     storage_key=page_key,
                     content_type="image/png",
                     checksum=checksum,

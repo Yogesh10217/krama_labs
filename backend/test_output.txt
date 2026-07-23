@@ -1,0 +1,11 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.4, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\Yogesh E\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Yogesh E\OneDrive\Desktop\Karma Ai\krama_labs\backend
+plugins: anyio-4.3.0
+collecting ... collected 2 items
+
+tests/test_integration_e2e.py::TestIntegrationE2E::test_e2e_multipage_pdf SKIPPED [ 50%]
+tests/test_integration_e2e.py::TestIntegrationE2E::test_e2e_image_conversion PASSED [100%]
+
+======================== 1 passed, 1 skipped in 0.25s =========================
