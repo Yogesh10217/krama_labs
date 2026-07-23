@@ -47,6 +47,8 @@ from app.storage.base import StorageNotFoundError
 from app.storage.factory import get_storage_provider
 from app.services.ocr_service import OCRService
 from app.ocr.schemas import DocumentOCRSummaryResponse
+from app.services.classification_service import ClassificationService
+from app.schemas.classification import ClassificationResponse
 
 
 router = APIRouter()
@@ -416,4 +418,44 @@ def run_document_ocr(
     service = OCRService(db=db, storage=storage)
     result = service.process_document(org.id, document_id)
     return DocumentOCRSummaryResponse(**result)
+
+
+# ─── Phase 5: Document Classification ────────────────────────────────────────
+
+@router.post(
+    "/documents/{document_id}/classify",
+    response_model=ClassificationResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Synchronously run classification on a document",
+    tags=["Document Classification"],
+)
+def run_document_classification(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Run document classification on an OCR_COMPLETED document."""
+    storage = get_storage_provider()
+    service = ClassificationService(db=db, storage=storage)
+    result = service.classify_document(org.id, document_id)
+    return ClassificationResponse.model_validate(result)
+
+
+@router.get(
+    "/documents/{document_id}/classification",
+    response_model=ClassificationResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get canonical classification result for a document",
+    tags=["Document Classification"],
+)
+def get_document_classification(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Retrieve existing document classification."""
+    storage = get_storage_provider()
+    service = ClassificationService(db=db, storage=storage)
+    result = service.get_classification(org.id, document_id)
+    return ClassificationResponse.model_validate(result)
 

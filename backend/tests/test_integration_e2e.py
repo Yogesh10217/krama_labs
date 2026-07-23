@@ -131,6 +131,28 @@ class TestIntegrationE2E:
             regions = db_session.query(OCRRegion).filter(OCRRegion.ocr_result_id == res.id).all()
             assert len(regions) > 0 or not paddle_installed # fake OCR always produces regions, Paddle might produce none if empty, but we wrote text.
             
+        # 8. Trigger Classification (Phase 5)
+        classify_res = client.post(f"/api/v1/documents/{doc_id}/classify", headers={"X-Organization-ID": str(test_org.id)})
+        assert classify_res.status_code == 200
+        classify_data = classify_res.json()
+        
+        assert classify_data["document_id"] == doc_id
+        assert "document_type" in classify_data
+        
+        db_session.refresh(doc)
+        assert doc.status == DocumentStatus.CLASSIFIED
+        assert doc.document_type == classify_data["document_type"]
+        
+        # Verify JSON artifact
+        from app.db.models.classification import DocumentClassification
+        db_class = db_session.query(DocumentClassification).filter(DocumentClassification.document_id == doc.id).first()
+        assert db_class is not None
+        assert storage.exists(db_class.artifact_storage_key)
+        
+        # 9. GET Classification
+        get_class_res = client.get(f"/api/v1/documents/{doc_id}/classification", headers={"X-Organization-ID": str(test_org.id)})
+        assert get_class_res.status_code == 200
+        assert get_class_res.json()["document_type"] == classify_data["document_type"]
     def test_e2e_multiframe_tiff(self, client, test_org, db_session, monkeypatch):
         import logging
         logging.getLogger("PIL").setLevel(logging.INFO)

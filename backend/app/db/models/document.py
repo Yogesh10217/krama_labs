@@ -32,3 +32,4 @@ class Document(Base):
     claim: Mapped["Claim"] = relationship(back_populates="documents")
     pages: Mapped[list["Page"]] = relationship(back_populates="document", cascade="all, delete-orphan")
     jobs: Mapped[list["Job"]] = relationship(back_populates="document")
+    classification: Mapped["DocumentClassification"] = relationship(back_populates="document", uselist=False, cascade="all, delete-orphan")

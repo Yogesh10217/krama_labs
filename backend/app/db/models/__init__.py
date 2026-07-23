@@ -7,4 +7,18 @@ from app.db.models.page import Page
 from app.db.models.job import Job
 from app.db.models.job_stage import JobStage
 from app.db.models.ocr import OCRPageResult, OCRRegion
+from app.db.models.classification import DocumentClassification
 
+__all__ = [
+    "Organization",
+    "User",
+    "Membership",
+    "Claim",
+    "Document",
+    "Page",
+    "OCRPageResult",
+    "OCRRegion",
+    "Job",
+    "JobStage",
+    "DocumentClassification"
+]
