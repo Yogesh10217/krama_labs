@@ -1,4 +1,5 @@
 import re
+import json
 from typing import Any, Tuple
 
 class ExtractionNormalizer:
@@ -51,3 +52,32 @@ class ExtractionNormalizer:
             norm_val = ""
 
         return raw_str, norm_val
+
+
+class ResponseNormalizer:
+    @staticmethod
+    def normalize_json(raw_output: str) -> dict:
+        """Strip markdown and parse JSON safely."""
+        cleaned = raw_output.strip()
+        if cleaned.startswith("```json"):
+            cleaned = cleaned[7:]
+        elif cleaned.startswith("```"):
+            cleaned = cleaned[3:]
+        
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+            
+        cleaned = cleaned.strip()
+        
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError as e:
+            # Maybe try to find first { and last }
+            start = cleaned.find("{")
+            end = cleaned.rfind("}")
+            if start != -1 and end != -1 and end > start:
+                try:
+                    return json.loads(cleaned[start:end+1])
+                except json.JSONDecodeError:
+                    pass
+            raise ValueError(f"Failed to parse JSON from provider output: {str(e)}")

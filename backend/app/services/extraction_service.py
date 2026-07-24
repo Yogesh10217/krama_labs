@@ -16,9 +16,9 @@ from app.db.models.job import Job
 from app.db.models.job_stage import JobStage
 from app.domain.enums import DocumentStatus, JobStageStatus, ExtractionStatus
 from app.storage.base import StorageProvider
-from app.extraction.registry import get_extractor
+from app.extraction.providers.factory import ProviderFactory
 from app.extraction.field_registry import get_schema
-from app.extraction.base import ExtractionInput
+from app.extraction.providers.base import ExtractionRequest
 from app.core.exceptions import (
     KramaException, 
     DocumentNotReadyForExtractionException,
@@ -115,17 +115,18 @@ class ExtractionService:
                 regions.extend(page.regions)
                 
             # 2. Extract
-            extractor = get_extractor(Config.EXTRACTION_PROVIDER)
+            provider = ProviderFactory.get()
             
-            input_data = ExtractionInput(
+            input_data = ExtractionRequest(
+                organization_id=org_id,
                 document_id=doc.id,
                 document_type=classification.document_type,
-                extraction_schema=schema,
-                pages=pages,
-                regions=regions
+                schema=schema,
+                ocr_pages=pages,
+                ocr_regions=regions
             )
             
-            result = extractor.extract(input_data)
+            result = provider.extract(input_data)
             
             # 3. Save artifact
             artifact_data = result.model_dump(mode="json")
@@ -149,10 +150,21 @@ class ExtractionService:
                 organization_id=org_id,
                 document_id=doc.id,
                 classification_id=classification.id,
-                extractor_name=result.extractor_name,
-                extractor_version=result.extractor_version,
-                schema_name=result.schema_name,
+                extractor_name=result.provider,
+                extractor_version=result.provider_version,
+                schema_name=schema.schema_name,
                 schema_version=result.schema_version,
+                provider=result.provider,
+                model=result.model,
+                provider_version=result.provider_version,
+                latency_ms=result.latency_ms,
+                prompt_tokens=result.prompt_tokens,
+                completion_tokens=result.completion_tokens,
+                request_id=result.request_id,
+                finish_reason=result.finish_reason,
+                cached=result.cached,
+                prompt_version=result.prompt_version,
+                provider_input_hash=result.provider_input_hash,
                 status=ExtractionStatus.COMPLETED,
                 artifact_storage_key=artifact_key,
                 started_at=start_time,

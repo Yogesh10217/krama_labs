@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, Float, ForeignKey, DateTime, UniqueConstraint, JSON
+from sqlalchemy import String, Float, ForeignKey, DateTime, UniqueConstraint, JSON, Integer, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Uuid
 from app.db.base import Base
@@ -18,6 +18,19 @@ class ExtractionRun(Base):
     extractor_version: Mapped[str] = mapped_column(String(50), nullable=False)
     schema_name: Mapped[str] = mapped_column(String(50), nullable=False)
     schema_version: Mapped[str] = mapped_column(String(50), nullable=False)
+
+    provider: Mapped[str] = mapped_column(String(50), nullable=True)
+    model: Mapped[str] = mapped_column(String(100), nullable=True)
+    provider_version: Mapped[str] = mapped_column(String(50), nullable=True)
+    latency_ms: Mapped[int] = mapped_column(Integer, nullable=True)
+    prompt_tokens: Mapped[int] = mapped_column(Integer, nullable=True)
+    completion_tokens: Mapped[int] = mapped_column(Integer, nullable=True)
+    request_id: Mapped[str] = mapped_column(String(255), nullable=True)
+    finish_reason: Mapped[str] = mapped_column(String(50), nullable=True)
+    cached: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
+    prompt_version: Mapped[str] = mapped_column(String(50), nullable=True)
+    provider_input_hash: Mapped[str] = mapped_column(String(255), nullable=True)
+
 
     status: Mapped[ExtractionStatus] = mapped_column(default=ExtractionStatus.PENDING, nullable=False)
     artifact_storage_key: Mapped[str] = mapped_column(String(1024), nullable=True)

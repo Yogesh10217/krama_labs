@@ -1,6 +1,7 @@
 """Configuration system for Krama AI backend."""
 
 import os
+from typing import Optional
 import json
 from typing import List, Tuple
 from dotenv import load_dotenv
@@ -74,7 +75,25 @@ class Config:
 
     # Phase 4: OCR Configuration
     OCR_PROVIDER: str = os.getenv("OCR_PROVIDER", "paddle")
+    
+    # Extraction Config
     EXTRACTION_PROVIDER: str = os.getenv("EXTRACTION_PROVIDER", "rules")
+    EXTRACTION_FALLBACK_ORDER: str = os.getenv("EXTRACTION_FALLBACK_ORDER", "rule,ollama,gemini,openai")
+    EXTRACTION_TIMEOUT_SECONDS: int = int(os.getenv("EXTRACTION_TIMEOUT_SECONDS", "30"))
+    EXTRACTION_RETRY_COUNT: int = int(os.getenv("EXTRACTION_RETRY_COUNT", "3"))
+
+    # Provider Configs
+    OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama3")
+    
+    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-1.5-pro")
+    
+    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
+    OPENAI_BASE_URL: str = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4o")
+
+    # Validation Config
     VALIDATION_PROVIDER: str = os.getenv("VALIDATION_PROVIDER", "rules")
     CLASSIFICATION_PROVIDER: str = os.getenv("CLASSIFICATION_PROVIDER", "rules")
     

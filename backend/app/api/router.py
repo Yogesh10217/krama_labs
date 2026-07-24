@@ -22,10 +22,11 @@ v1_router.include_router(chat.router, prefix="/chat", tags=["Legacy Chat"])
 v1_router.include_router(demo.router, tags=["Legacy Demo"])
 
 # Mount new Phase 1 production routes
-from app.api.routes.v1 import organizations, claims, documents as v1_docs, jobs, pages as v1_pages
+from app.api.routes.v1 import organizations, claims, documents as v1_docs, jobs, pages as v1_pages, providers
 
 v1_router.include_router(organizations.router, prefix="/organizations", tags=["Organizations"])
 v1_router.include_router(claims.router, prefix="/claims", tags=["Claims"])
 v1_router.include_router(v1_docs.router, tags=["Documents"])
 v1_router.include_router(jobs.router, tags=["Jobs"])
 v1_router.include_router(v1_pages.router, prefix="/pages", tags=["Pages"])
+v1_router.include_router(providers.router, prefix="/providers", tags=["Providers"])

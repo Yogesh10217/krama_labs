@@ -76,7 +76,7 @@ def classified_document(db_session, test_org, ocr_completed_document):
 def test_extraction_success(db_session, test_org, classified_document, fake_extractor, mock_storage_provider):
     service = ExtractionService(db_session, mock_storage_provider)
     
-    with patch("app.services.extraction_service.get_extractor", return_value=fake_extractor):
+    with patch("app.services.extraction_service.ProviderFactory.get", return_value=fake_extractor):
         run = service.extract_document(test_org.id, classified_document.id)
         
     assert run is not None
@@ -105,7 +105,7 @@ def test_extraction_failure_compensation(db_session, test_org, classified_docume
     service = ExtractionService(db_session, mock_storage_provider)
     fake_extractor.should_fail = True
     
-    with patch("app.services.extraction_service.get_extractor", return_value=fake_extractor):
+    with patch("app.services.extraction_service.ProviderFactory.get", return_value=fake_extractor):
         with pytest.raises(ExtractionFailedException):
             service.extract_document(test_org.id, classified_document.id)
             
@@ -120,7 +120,7 @@ def test_extraction_failure_compensation(db_session, test_org, classified_docume
 def test_extraction_idempotency(db_session, test_org, classified_document, fake_extractor, mock_storage_provider):
     service = ExtractionService(db_session, mock_storage_provider)
     
-    with patch("app.services.extraction_service.get_extractor", return_value=fake_extractor):
+    with patch("app.services.extraction_service.ProviderFactory.get", return_value=fake_extractor):
         run1 = service.extract_document(test_org.id, classified_document.id)
         run2 = service.extract_document(test_org.id, classified_document.id)
         
