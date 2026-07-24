@@ -175,6 +175,29 @@ class TestIntegrationE2E:
         get_ext_res = client.get(f"/api/v1/documents/{doc_id}/extraction", headers={"X-Organization-ID": str(test_org.id)})
         assert get_ext_res.status_code == 200
         assert get_ext_res.json()["id"] == str(db_ext.id)
+        
+        # 12. Trigger Validation (Phase 7)
+        val_res = client.post(f"/api/v1/documents/{doc_id}/validate", headers={"X-Organization-ID": str(test_org.id)})
+        assert val_res.status_code == 200
+        val_data = val_res.json()
+        assert "validation_run" in val_data
+        assert val_data["validation_run"]["document_id"] == doc_id
+        assert val_data["validation_run"]["status"] == "COMPLETED"
+        assert "summary" in val_data
+        
+        db_session.refresh(doc)
+        assert doc.status == DocumentStatus.VALIDATED
+        
+        # Verify JSON artifact
+        from app.db.models.validation import ValidationRun
+        db_val = db_session.query(ValidationRun).filter(ValidationRun.document_id == doc.id).first()
+        assert db_val is not None
+        assert storage.exists(db_val.artifact_storage_key)
+        
+        # 13. GET Validation
+        get_val_res = client.get(f"/api/v1/documents/{doc_id}/validation", headers={"X-Organization-ID": str(test_org.id)})
+        assert get_val_res.status_code == 200
+        assert get_val_res.json()["validation_run"]["id"] == str(db_val.id)
     def test_e2e_multiframe_tiff(self, client, test_org, db_session, monkeypatch):
         import logging
         logging.getLogger("PIL").setLevel(logging.INFO)

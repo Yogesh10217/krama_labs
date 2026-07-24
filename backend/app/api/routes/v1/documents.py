@@ -498,3 +498,76 @@ def get_document_extraction(
     service = ExtractionService(db=db, storage=storage)
     result = service.get_extraction(org.id, document_id)
     return ExtractionResponse.model_validate(result)
+
+
+# ─── Phase 7: Document Validation ───────────────────────────────────────────
+
+from app.schemas.validation import ValidationRunSchema, ValidationSummarySchema
+from app.services.validation_service import ValidationService
+
+@router.post(
+    "/documents/{document_id}/validate",
+    response_model=ValidationSummarySchema,
+    status_code=status.HTTP_200_OK,
+    summary="Synchronously run validation on a document",
+    tags=["Document Validation"],
+)
+def run_document_validation(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Run document validation."""
+    storage = get_storage_provider()
+    service = ValidationService(db=db, storage=storage)
+    run = service.validate_document(org.id, document_id)
+    
+    # Calculate summary
+    summary = {
+        "SUPPORTED": 0,
+        "PARTIALLY_SUPPORTED": 0,
+        "UNSUPPORTED": 0,
+        "MISSING_EVIDENCE": 0,
+        "AMBIGUOUS": 0
+    }
+    for f in run.fields:
+        summary[f.validation_status.value] = summary.get(f.validation_status.value, 0) + 1
+        
+    return ValidationSummarySchema(
+        validation_run=ValidationRunSchema.model_validate(run),
+        summary=summary
+    )
+
+
+@router.get(
+    "/documents/{document_id}/validation",
+    response_model=ValidationSummarySchema,
+    status_code=status.HTTP_200_OK,
+    summary="Get canonical validation result for a document",
+    tags=["Document Validation"],
+)
+def get_document_validation(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Retrieve existing document validation."""
+    storage = get_storage_provider()
+    service = ValidationService(db=db, storage=storage)
+    run = service.get_validation(org.id, document_id)
+    
+    # Calculate summary
+    summary = {
+        "SUPPORTED": 0,
+        "PARTIALLY_SUPPORTED": 0,
+        "UNSUPPORTED": 0,
+        "MISSING_EVIDENCE": 0,
+        "AMBIGUOUS": 0
+    }
+    for f in run.fields:
+        summary[f.validation_status.value] = summary.get(f.validation_status.value, 0) + 1
+        
+    return ValidationSummarySchema(
+        validation_run=ValidationRunSchema.model_validate(run),
+        summary=summary
+    )

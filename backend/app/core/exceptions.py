@@ -224,6 +224,22 @@ class ExtractionFailedException(KramaException):
             message=f"Extraction failed for document {document_id}: {detail}"
         )
 
+class ValidationFailedException(KramaException):
+    def __init__(self, document_id: str, detail: str):
+        super().__init__(
+            status_code=500,
+            code="VALIDATION_FAILED",
+            message=f"Validation failed for document {document_id}: {detail}"
+        )
+
+class DocumentNotReadyForValidationException(KramaException):
+    def __init__(self, document_id: str, status: str):
+        super().__init__(
+            status_code=400,
+            code="DOCUMENT_NOT_READY_FOR_VALIDATION",
+            message=f"Document {document_id} cannot be validated in status {status}."
+        )
+
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""
     return JSONResponse(

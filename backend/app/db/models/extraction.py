@@ -29,6 +29,7 @@ class ExtractionRun(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
     fields: Mapped[list["ExtractedField"]] = relationship("ExtractedField", back_populates="extraction_run", cascade="all, delete-orphan")
+    classification: Mapped["DocumentClassification"] = relationship("DocumentClassification", backref="extraction_runs")
 
 
 class ExtractedField(Base):
