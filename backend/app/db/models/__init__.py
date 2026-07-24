@@ -10,6 +10,7 @@ from app.db.models.ocr import OCRPageResult, OCRRegion
 from app.db.models.classification import DocumentClassification
 from app.db.models.extraction import ExtractionRun, ExtractedField, FieldEvidence
 from app.db.models.validation import ValidationRun, ValidatedField, ValidationEvidence
+from app.db.models.review import ReviewSession, ReviewDecision, ReviewComment, ReviewHistory
 
 __all__ = [
     "Organization",
@@ -28,5 +29,9 @@ __all__ = [
     "FieldEvidence",
     "ValidationRun",
     "ValidatedField",
-    "ValidationEvidence"
+    "ValidationEvidence",
+    "ReviewSession",
+    "ReviewDecision",
+    "ReviewComment",
+    "ReviewHistory"
 ]

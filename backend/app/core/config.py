@@ -107,6 +107,11 @@ class Config:
     # Grounding
     FUZZY_MATCH_THRESHOLD: int = int(os.getenv("FUZZY_MATCH_THRESHOLD", "75"))
 
+    # Phase 9: Workflow & Review Configuration
+    AUTO_APPROVAL_THRESHOLD: float = float(os.getenv("AUTO_APPROVAL_THRESHOLD", "0.95"))
+    REQUIRE_REVIEW_FOR_DOCUMENT_TYPES: str = os.getenv("REQUIRE_REVIEW_FOR_DOCUMENT_TYPES", "")
+    CRITICAL_FIELDS: str = os.getenv("CRITICAL_FIELDS", "total,invoice_number,aadhaar_number,pan_number")
+
     # Database Settings
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./krama_dev.db")
     DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "False").lower() in ("true", "1", "yes")

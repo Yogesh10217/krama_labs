@@ -240,6 +240,31 @@ class DocumentNotReadyForValidationException(KramaException):
             message=f"Document {document_id} cannot be validated in status {status}."
         )
 
+# ─── Phase 9: Workflow & Review Exceptions ─────────────────────────────────────
+
+class ReviewSessionNotFoundException(NotFoundException):
+    def __init__(self, document_id: str):
+        super().__init__(
+            message=f"Review session for document {document_id} was not found.",
+            code="REVIEW_SESSION_NOT_FOUND"
+        )
+
+class ConcurrentReviewConflictException(ConflictException):
+    def __init__(self, message: str = "Review session was modified by another user. Please reload and retry."):
+        super().__init__(
+            message=message,
+            code="CONCURRENT_REVIEW_CONFLICT"
+        )
+
+class ReviewStateInvalidException(KramaException):
+    def __init__(self, message: str):
+        super().__init__(
+            message=message,
+            code="REVIEW_STATE_INVALID",
+            status_code=status.HTTP_400_BAD_REQUEST
+        )
+
+
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""
     return JSONResponse(

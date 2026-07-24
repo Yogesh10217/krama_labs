@@ -517,10 +517,14 @@ def run_document_validation(
     org: Organization = Depends(get_organization_context),
     db: Session = Depends(get_db),
 ):
-    """Run document validation."""
     storage = get_storage_provider()
     service = ValidationService(db=db, storage=storage)
     run = service.validate_document(org.id, document_id)
+    
+    # Phase 9: Trigger WorkflowOrchestrator to evaluate auto-approval / route to human review
+    from app.services.workflow_orchestrator import WorkflowOrchestrator
+    orchestrator = WorkflowOrchestrator(db=db)
+    orchestrator.process_validation_result(org.id, document_id, validation_run_id=run.id)
     
     # Calculate summary
     summary = {
