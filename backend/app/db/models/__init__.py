@@ -11,6 +11,7 @@ from app.db.models.classification import DocumentClassification
 from app.db.models.extraction import ExtractionRun, ExtractedField, FieldEvidence
 from app.db.models.validation import ValidationRun, ValidatedField, ValidationEvidence
 from app.db.models.review import ReviewSession, ReviewDecision, ReviewComment, ReviewHistory
+from app.db.models.job_execution import JobExecution, JobEvent, JobRetry
 
 __all__ = [
     "Organization",
@@ -33,5 +34,8 @@ __all__ = [
     "ReviewSession",
     "ReviewDecision",
     "ReviewComment",
-    "ReviewHistory"
+    "ReviewHistory",
+    "JobExecution",
+    "JobEvent",
+    "JobRetry"
 ]

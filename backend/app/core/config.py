@@ -112,6 +112,16 @@ class Config:
     REQUIRE_REVIEW_FOR_DOCUMENT_TYPES: str = os.getenv("REQUIRE_REVIEW_FOR_DOCUMENT_TYPES", "")
     CRITICAL_FIELDS: str = os.getenv("CRITICAL_FIELDS", "total,invoice_number,aadhaar_number,pan_number")
 
+    # Phase 10: Async Job Execution Configuration
+    JOB_QUEUE_PROVIDER: str = os.getenv("JOB_QUEUE_PROVIDER", "inmemory")
+    MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
+    RETRY_BACKOFF_SECONDS: int = int(os.getenv("RETRY_BACKOFF_SECONDS", "2"))
+    JOB_TIMEOUT_SECONDS: int = int(os.getenv("JOB_TIMEOUT_SECONDS", "300"))
+    MAX_CONCURRENT_WORKERS: int = int(os.getenv("MAX_CONCURRENT_WORKERS", "4"))
+    QUEUE_NAME: str = os.getenv("QUEUE_NAME", "document-intelligence")
+    WORKER_HEARTBEAT_INTERVAL_SECONDS: int = int(os.getenv("WORKER_HEARTBEAT_INTERVAL_SECONDS", "30"))
+    JOB_STALE_AFTER_SECONDS: int = int(os.getenv("JOB_STALE_AFTER_SECONDS", "120"))
+
     # Database Settings
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./krama_dev.db")
     DATABASE_ECHO: bool = os.getenv("DATABASE_ECHO", "False").lower() in ("true", "1", "yes")
