@@ -8,6 +8,7 @@ from app.db.models.job import Job
 from app.db.models.job_stage import JobStage
 from app.db.models.ocr import OCRPageResult, OCRRegion
 from app.db.models.classification import DocumentClassification
+from app.db.models.extraction import ExtractionRun, ExtractedField, FieldEvidence
 
 __all__ = [
     "Organization",
@@ -20,5 +21,8 @@ __all__ = [
     "OCRRegion",
     "Job",
     "JobStage",
-    "DocumentClassification"
+    "DocumentClassification",
+    "ExtractionRun",
+    "ExtractedField",
+    "FieldEvidence"
 ]

@@ -39,6 +39,8 @@ from app.schemas.ingestion import (
     UploadedJobResponse,
 )
 from app.schemas.page import ConversionResponse, PageResponse, PageListResponse
+from app.schemas.classification import ClassificationResponse
+from app.schemas.extraction import ExtractionResponse
 from app.services.document_service import DocumentService
 from app.services.ingestion_service import IngestionService
 from app.services.conversion_service import ConversionService
@@ -48,7 +50,7 @@ from app.storage.factory import get_storage_provider
 from app.services.ocr_service import OCRService
 from app.ocr.schemas import DocumentOCRSummaryResponse
 from app.services.classification_service import ClassificationService
-from app.schemas.classification import ClassificationResponse
+from app.services.extraction_service import ExtractionService
 
 
 router = APIRouter()
@@ -459,3 +461,40 @@ def get_document_classification(
     result = service.get_classification(org.id, document_id)
     return ClassificationResponse.model_validate(result)
 
+
+@router.post(
+    "/documents/{document_id}/extract",
+    response_model=ExtractionResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Synchronously run extraction on a document",
+    tags=["Document Extraction"],
+)
+def run_document_extraction(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Run document extraction."""
+    storage = get_storage_provider()
+    service = ExtractionService(db=db, storage=storage)
+    result = service.extract_document(org.id, document_id)
+    return ExtractionResponse.model_validate(result)
+
+
+@router.get(
+    "/documents/{document_id}/extraction",
+    response_model=ExtractionResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get canonical extraction result for a document",
+    tags=["Document Extraction"],
+)
+def get_document_extraction(
+    document_id: uuid.UUID,
+    org: Organization = Depends(get_organization_context),
+    db: Session = Depends(get_db),
+):
+    """Retrieve existing document extraction."""
+    storage = get_storage_provider()
+    service = ExtractionService(db=db, storage=storage)
+    result = service.get_extraction(org.id, document_id)
+    return ExtractionResponse.model_validate(result)

@@ -206,6 +206,24 @@ class OCRProviderUnavailableException(ServiceUnavailableException):
     def __init__(self, message: str = "Configured OCR provider is not available."):
         super().__init__(message, "OCR_PROVIDER_UNAVAILABLE")
 
+
+class DocumentNotReadyForExtractionException(KramaException):
+    def __init__(self, document_id: str, status: str):
+        super().__init__(
+            status_code=400,
+            code="DOCUMENT_NOT_READY_FOR_EXTRACTION",
+            message=f"Document {document_id} cannot be extracted in status {status}."
+        )
+
+
+class ExtractionFailedException(KramaException):
+    def __init__(self, document_id: str, detail: str):
+        super().__init__(
+            status_code=500,
+            code="EXTRACTION_FAILED",
+            message=f"Extraction failed for document {document_id}: {detail}"
+        )
+
 def make_error_response(code: str, message: str, status_code: int) -> JSONResponse:
     """Helper to construct standard JSON error response."""
     return JSONResponse(

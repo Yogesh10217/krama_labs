@@ -153,6 +153,28 @@ class TestIntegrationE2E:
         get_class_res = client.get(f"/api/v1/documents/{doc_id}/classification", headers={"X-Organization-ID": str(test_org.id)})
         assert get_class_res.status_code == 200
         assert get_class_res.json()["document_type"] == classify_data["document_type"]
+
+        # 10. Trigger Extraction (Phase 6)
+        extract_res = client.post(f"/api/v1/documents/{doc_id}/extract", headers={"X-Organization-ID": str(test_org.id)})
+        assert extract_res.status_code == 200
+        extract_data = extract_res.json()
+        assert extract_data["document_id"] == doc_id
+        assert extract_data["status"] == "COMPLETED"
+        assert extract_data["schema_name"] == f"{classify_data['document_type']}_extraction"
+        
+        db_session.refresh(doc)
+        assert doc.status == DocumentStatus.EXTRACTED
+        
+        # Verify JSON artifact
+        from app.db.models.extraction import ExtractionRun
+        db_ext = db_session.query(ExtractionRun).filter(ExtractionRun.document_id == doc.id).first()
+        assert db_ext is not None
+        assert storage.exists(db_ext.artifact_storage_key)
+        
+        # 11. GET Extraction
+        get_ext_res = client.get(f"/api/v1/documents/{doc_id}/extraction", headers={"X-Organization-ID": str(test_org.id)})
+        assert get_ext_res.status_code == 200
+        assert get_ext_res.json()["id"] == str(db_ext.id)
     def test_e2e_multiframe_tiff(self, client, test_org, db_session, monkeypatch):
         import logging
         logging.getLogger("PIL").setLevel(logging.INFO)

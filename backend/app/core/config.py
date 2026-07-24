@@ -74,6 +74,7 @@ class Config:
 
     # Phase 4: OCR Configuration
     OCR_PROVIDER: str = os.getenv("OCR_PROVIDER", "paddle")
+    EXTRACTION_PROVIDER: str = os.getenv("EXTRACTION_PROVIDER", "rules")
     CLASSIFICATION_PROVIDER: str = os.getenv("CLASSIFICATION_PROVIDER", "rules")
     OCR_LANG: str = os.getenv("OCR_LANG", "en")
     OCR_USE_GPU: bool = os.getenv("OCR_USE_GPU", "False").lower() in ("true", "1", "yes")
