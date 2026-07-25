@@ -6,6 +6,7 @@ from app.db.session import get_db
 from app.core.exceptions import KramaException, NotFoundException
 from app.db.models.organization import Organization
 from app.services.organization_service import OrganizationService
+from app.security.dependencies import get_current_principal, Principal
 
 class OrganizationContextRequiredException(KramaException):
     def __init__(self):
@@ -17,20 +18,17 @@ class InvalidOrganizationContextException(KramaException):
 
 
 def get_organization_context(
-    x_organization_id: Annotated[str | None, Header()] = None,
+    principal: Principal = Depends(get_current_principal),
     db: Session = Depends(get_db)
 ) -> Organization:
     """
-    Dependency to enforce organization context for V1 APIs.
-    Temporary mechanism until full auth is implemented.
+    Dependency to enforce organization context for APIs.
+    Uses the authenticated Principal to resolve the organization.
     """
-    if not x_organization_id:
+    if not principal.organization_id:
         raise OrganizationContextRequiredException()
 
-    try:
-        org_id = uuid.UUID(x_organization_id)
-    except ValueError:
-        raise InvalidOrganizationContextException()
+    org_id = principal.organization_id
 
     service = OrganizationService(db)
     try:

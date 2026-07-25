@@ -40,3 +40,9 @@ from app.api.routes.observability import router as observability_router
 # Mount on both root /api and /api/v1 for consistency
 api_router.include_router(observability_router, tags=["Observability"])
 v1_router.include_router(observability_router, tags=["Observability"])
+
+# Phase 12: Security Routes
+from app.api.routes import auth, apikeys
+
+v1_router.include_router(auth.router)
+v1_router.include_router(apikeys.router)

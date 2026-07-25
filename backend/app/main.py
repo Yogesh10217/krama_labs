@@ -30,6 +30,7 @@ from app.observability.middleware import (
 )
 from app.observability.tracing import setup_tracing
 from app.observability.circuit_breaker import CircuitBreakerRegistry
+from app.security.middleware import SecurityHeadersMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +115,9 @@ def create_app() -> FastAPI:
 
     # 1. CorrelationIdMiddleware (outermost — sets correlation_id first)
     app.add_middleware(CorrelationIdMiddleware)
+
+    # SecurityHeadersMiddleware
+    app.add_middleware(SecurityHeadersMiddleware)
 
     # CORS (outermost of all — before our middleware)
     app.add_middleware(

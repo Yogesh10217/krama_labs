@@ -204,6 +204,28 @@ class Config:
     SLOW_STAGE_THRESHOLD_MS: int = int(os.getenv("SLOW_STAGE_THRESHOLD_MS", "5000"))
     SLOW_PROVIDER_THRESHOLD_MS: int = int(os.getenv("SLOW_PROVIDER_THRESHOLD_MS", "3000"))
 
+    # ─── Phase 12: Security & Authentication ─────────────────────────────────────
+    ENABLE_AUTH: bool = os.getenv("ENABLE_AUTH", "False").lower() in ("true", "1", "yes")
+    ENABLE_RBAC: bool = os.getenv("ENABLE_RBAC", "False").lower() in ("true", "1", "yes")
+    ENABLE_API_KEYS: bool = os.getenv("ENABLE_API_KEYS", "False").lower() in ("true", "1", "yes")
+    ENABLE_REDIS: bool = os.getenv("ENABLE_REDIS", "False").lower() in ("true", "1", "yes")
+    ENABLE_SECRET_PROVIDER: bool = os.getenv("ENABLE_SECRET_PROVIDER", "False").lower() in ("true", "1", "yes")
+
+    # JWT Settings
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "super-secret-key-change-in-production")
+    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    JWT_ACCESS_EXPIRE_MINUTES: int = int(os.getenv("JWT_ACCESS_EXPIRE_MINUTES", "30"))
+    JWT_REFRESH_EXPIRE_DAYS: int = int(os.getenv("JWT_REFRESH_EXPIRE_DAYS", "7"))
+
+    # Secret Provider Settings
+    SECRET_PROVIDER: str = os.getenv("SECRET_PROVIDER", "environment")  # "environment" | "vault"
+    VAULT_URL: str = os.getenv("VAULT_URL", "http://localhost:8200")
+    VAULT_TOKEN: str = os.getenv("VAULT_TOKEN", "")
+
+    # Security Limits
+    MAX_REQUEST_BODY_SIZE_MB: int = int(os.getenv("MAX_REQUEST_BODY_SIZE_MB", "50"))
+    SECURITY_HEADERS_ENABLED: bool = os.getenv("SECURITY_HEADERS_ENABLED", "True").lower() in ("true", "1", "yes")
+
     @classmethod
     def validate(cls) -> bool:
         """Validate critical configuration settings."""

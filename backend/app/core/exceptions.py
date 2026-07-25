@@ -42,6 +42,16 @@ class ValidationException(KramaException):
         super().__init__(message, code, status.HTTP_400_BAD_REQUEST)
 
 
+class ConfigurationException(KramaException):
+    def __init__(self, message: str, code: str = "CONFIGURATION_ERROR"):
+        super().__init__(message, code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AuthenticationException(KramaException):
+    def __init__(self, message: str = "Authentication failed", code: str = "AUTHENTICATION_FAILED"):
+        super().__init__(message, code, status.HTTP_401_UNAUTHORIZED)
+
+
 class ServiceUnavailableException(KramaException):
     """Raised when an optional dependency or external API is unavailable."""
     

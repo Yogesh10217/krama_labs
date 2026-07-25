@@ -10,11 +10,13 @@ class UserStatus(str, Enum):
     SUSPENDED = "SUSPENDED"
 
 class MembershipRole(str, Enum):
+    SYSTEM_ADMIN = "SYSTEM_ADMIN"
     OWNER = "OWNER"
     ADMIN = "ADMIN"
     REVIEWER = "REVIEWER"
     OPERATOR = "OPERATOR"
     VIEWER = "VIEWER"
+    API_CLIENT = "API_CLIENT"
 
 class MembershipStatus(str, Enum):
     ACTIVE = "ACTIVE"
