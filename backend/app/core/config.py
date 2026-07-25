@@ -159,6 +159,51 @@ class Config:
     REDIS_URL: str = os.getenv("REDIS_URL", "")
     OBJECT_STORAGE_ENDPOINT: str = os.getenv("OBJECT_STORAGE_ENDPOINT", "")
 
+    # ─── Phase 11: Observability Feature Flags ───────────────────────────────────
+    ENABLE_METRICS: bool = os.getenv("ENABLE_METRICS", "True").lower() in ("true", "1", "yes")
+    ENABLE_TRACING: bool = os.getenv("ENABLE_TRACING", "True").lower() in ("true", "1", "yes")
+    ENABLE_CACHE: bool = os.getenv("ENABLE_CACHE", "True").lower() in ("true", "1", "yes")
+    ENABLE_RATE_LIMIT: bool = os.getenv("ENABLE_RATE_LIMIT", "False").lower() in ("true", "1", "yes")
+    ENABLE_CIRCUIT_BREAKER: bool = os.getenv("ENABLE_CIRCUIT_BREAKER", "True").lower() in ("true", "1", "yes")
+
+    # ─── Phase 11: Prometheus ────────────────────────────────────────────────────
+    PROMETHEUS_NAMESPACE: str = os.getenv("PROMETHEUS_NAMESPACE", "krama")
+    PROMETHEUS_MULTIPROC_DIR: str = os.getenv("PROMETHEUS_MULTIPROC_DIR", "")
+
+    # ─── Phase 11: OpenTelemetry Tracing ─────────────────────────────────────────
+    OTLP_ENDPOINT: str = os.getenv("OTLP_ENDPOINT", "")
+    OTLP_INSECURE: bool = os.getenv("OTLP_INSECURE", "True").lower() in ("true", "1", "yes")
+    OTEL_SERVICE_NAME: str = os.getenv("OTEL_SERVICE_NAME", "krama-ai-backend")
+
+    # ─── Phase 11: Cache ─────────────────────────────────────────────────────────
+    # Supported: "inmemory" | "redis"
+    CACHE_PROVIDER: str = os.getenv("CACHE_PROVIDER", "inmemory")
+    # Default TTL in seconds for cached values
+    CACHE_TTL: int = int(os.getenv("CACHE_TTL", "300"))
+    # Per-category TTL overrides (seconds)
+    CACHE_TTL_PROVIDER_HEALTH: int = int(os.getenv("CACHE_TTL_PROVIDER_HEALTH", "30"))
+    CACHE_TTL_MODEL_LIST: int = int(os.getenv("CACHE_TTL_MODEL_LIST", "600"))
+    CACHE_TTL_CONFIG: int = int(os.getenv("CACHE_TTL_CONFIG", "3600"))
+    CACHE_TTL_PROMPT_TEMPLATES: int = int(os.getenv("CACHE_TTL_PROMPT_TEMPLATES", "3600"))
+    CACHE_TTL_CLASSIFICATION_SCHEMAS: int = int(os.getenv("CACHE_TTL_CLASSIFICATION_SCHEMAS", "3600"))
+
+    # ─── Phase 11: Rate Limiting ─────────────────────────────────────────────────
+    # Requests allowed per RATE_LIMIT_WINDOW seconds (per-organization / per-IP)
+    RATE_LIMIT_REQUESTS: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
+    RATE_LIMIT_WINDOW: int = int(os.getenv("RATE_LIMIT_WINDOW", "60"))
+    # Burst: extra requests above the steady-state limit before throttling
+    RATE_LIMIT_BURST: int = int(os.getenv("RATE_LIMIT_BURST", "20"))
+
+    # ─── Phase 11: Circuit Breaker ───────────────────────────────────────────────
+    CB_FAILURE_THRESHOLD: int = int(os.getenv("CB_FAILURE_THRESHOLD", "5"))
+    CB_RECOVERY_TIMEOUT: int = int(os.getenv("CB_RECOVERY_TIMEOUT", "60"))
+    CB_HALF_OPEN_MAX_CALLS: int = int(os.getenv("CB_HALF_OPEN_MAX_CALLS", "3"))
+
+    # ─── Phase 11: Slow-request / slow-stage thresholds (ms) ────────────────────
+    SLOW_REQUEST_THRESHOLD_MS: int = int(os.getenv("SLOW_REQUEST_THRESHOLD_MS", "2000"))
+    SLOW_STAGE_THRESHOLD_MS: int = int(os.getenv("SLOW_STAGE_THRESHOLD_MS", "5000"))
+    SLOW_PROVIDER_THRESHOLD_MS: int = int(os.getenv("SLOW_PROVIDER_THRESHOLD_MS", "3000"))
+
     @classmethod
     def validate(cls) -> bool:
         """Validate critical configuration settings."""

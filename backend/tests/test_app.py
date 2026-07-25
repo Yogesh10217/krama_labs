@@ -6,19 +6,22 @@ from fastapi import status
 
 
 def test_request_id_generation(client):
-    """Test that a request ID is automatically generated if none is sent."""
+    """Test that a correlation ID is automatically generated if none is sent (Phase 11)."""
     response = client.get("/api/live")
     assert response.status_code == status.HTTP_200_OK
-    assert "X-Request-ID" in response.headers
-    assert len(response.headers["X-Request-ID"]) > 0
+    # Phase 11: middleware sets X-Correlation-ID (supersedes X-Request-ID)
+    corr_id = response.headers.get("X-Correlation-ID") or response.headers.get("X-Request-ID")
+    assert corr_id is not None
+    assert len(corr_id) > 0
 
 
 def test_request_id_propagation(client):
-    """Test that a sent request ID is propagated back in response headers."""
-    req_id = "test-correlation-id-12345"
-    response = client.get("/api/live", headers={"X-Request-ID": req_id})
+    """Test that a sent X-Correlation-ID is echoed back (Phase 11)."""
+    corr_id = "test-correlation-id-12345"
+    # Phase 11 primary header is X-Correlation-ID
+    response = client.get("/api/live", headers={"X-Correlation-ID": corr_id})
     assert response.status_code == status.HTTP_200_OK
-    assert response.headers["X-Request-ID"] == req_id
+    assert response.headers.get("X-Correlation-ID") == corr_id
 
 
 def test_unknown_route_behavior(client):

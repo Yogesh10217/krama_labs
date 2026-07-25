@@ -33,3 +33,10 @@ v1_router.include_router(v1_pages.router, prefix="/pages", tags=["Pages"])
 v1_router.include_router(providers.router, prefix="/providers", tags=["Providers"])
 v1_router.include_router(review.router, prefix="/documents", tags=["Review & Final Document"])
 v1_router.include_router(jobs_async.router)  # Phase 10: Async Job Execution
+
+# Phase 11: Observability routes (/metrics, /observability/status)
+from app.api.routes.observability import router as observability_router
+
+# Mount on both root /api and /api/v1 for consistency
+api_router.include_router(observability_router, tags=["Observability"])
+v1_router.include_router(observability_router, tags=["Observability"])

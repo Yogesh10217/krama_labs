@@ -1,111 +1,149 @@
-"""Health check endpoints for the backend."""
+"""
+app/api/routes/health.py — Phase 11 Enhanced Health Endpoints
 
-import os
+Strict endpoint responsibilities (per approved spec):
+
+  GET /live   → Liveness probe
+    - No I/O
+    - Returns 200 always (proves process is running)
+    - Kubernetes: liveness probe target
+
+  GET /ready  → Readiness probe
+    - Fast filesystem + config checks only (< 100ms)
+    - Returns 200 (ready) or 503 (not ready)
+    - Kubernetes: readiness probe target
+
+  GET /health → Full diagnostic health
+    - Database, storage, queue, AI providers, config
+    - Returns 200 (HEALTHY/DEGRADED) or 503 (UNHEALTHY)
+    - Three-level model: HEALTHY | DEGRADED | UNHEALTHY
+    - May be slower (up to 2s); not intended for frequent polling
+
+These endpoints intentionally do NOT import or depend on any business service.
+"""
+
 import logging
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
+
 from app.core.config import Config
+from app.db.session import get_db
+from app.observability.health import HealthChecker, HealthLevel
+from app.observability.readiness import ReadinessChecker, ReadinessStatus, liveness_response
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.get("/live", status_code=status.HTTP_200_OK)
+# ---------------------------------------------------------------------------
+# GET /live — Liveness probe
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/live",
+    tags=["Health"],
+    summary="Liveness probe",
+    description=(
+        "Confirms that the process is alive. Performs no I/O. "
+        "Always returns HTTP 200. "
+        "Use as a Kubernetes liveness probe target."
+    ),
+)
 async def live():
-    """Liveness probe: verifies if the server process is alive."""
-    return {"status": "ok", "service": Config.APP_NAME}
+    """Ultra-lightweight liveness check. Never returns 503."""
+    return liveness_response()
 
 
-@router.get("/ready", status_code=status.HTTP_200_OK)
+# ---------------------------------------------------------------------------
+# GET /ready — Readiness probe
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/ready",
+    tags=["Health"],
+    summary="Readiness probe",
+    description=(
+        "Checks whether the service is ready to accept traffic. "
+        "Verifies config validity and required filesystem directories. "
+        "Returns 200 when ready, 503 when not ready. "
+        "Use as a Kubernetes readiness probe target."
+    ),
+)
 async def ready():
-    """Readiness probe: verifies if required resources are ready for requests."""
-    checks = {}
-    
-    # 1. Config Validation
-    try:
-        Config.validate()
-        checks["config"] = True
-    except Exception as e:
-        logger.error(f"Readiness check failed - Config invalid: {e}")
-        checks["config"] = False
-        
-    # 2. Directory Access Checks
-    for name, directory in [("upload_dir", Config.UPLOAD_DIR), ("results_dir", Config.RESULTS_DIR)]:
-        try:
-            os.makedirs(directory, exist_ok=True)
-            # Try to write a temp check file
-            test_file = os.path.join(directory, ".readiness_test")
-            with open(test_file, "w") as f:
-                f.write("ready")
-            os.remove(test_file)
-            checks[name] = True
-        except Exception as e:
-            logger.error(f"Readiness check failed - Directory '{directory}' inaccessible: {e}")
-            checks[name] = False
+    """Fast readiness check (< 100ms). Config + filesystem only."""
+    checker = ReadinessChecker()
+    report  = checker.check()
 
-    # Check overall readiness
-    is_ready = all(checks.values())
-    if is_ready:
-        return {
-            "status": "ready",
-            "service": Config.APP_NAME,
-            "checks": checks
-        }
+    if report.status == ReadinessStatus.READY:
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=report.to_dict(),
+        )
     else:
+        logger.warning("Readiness check failed: %s", report.details)
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content={
-                "status": "not_ready",
-                "service": Config.APP_NAME,
-                "checks": checks
-            }
+            content=report.to_dict(),
         )
 
 
-@router.get("/health", status_code=status.HTTP_200_OK)
-async def health():
-    """Health check: provides diagnostic metadata about service features and options."""
-    # Check if optional modules are installed
-    has_paddleocr = False
-    try:
-        import paddleocr
-        has_paddleocr = True
-    except ImportError:
-        pass
+# ---------------------------------------------------------------------------
+# GET /health — Full diagnostic health (three-level)
+# ---------------------------------------------------------------------------
 
-    has_pymupdf = False
-    try:
-        import fitz
-        has_pymupdf = True
-    except ImportError:
-        pass
+@router.get(
+    "/health",
+    tags=["Health"],
+    summary="Full diagnostic health check",
+    description=(
+        "Runs all health probes: database, storage, queue, AI providers, config. "
+        "Returns three-level status: HEALTHY | DEGRADED | UNHEALTHY. "
+        "HTTP 200 for HEALTHY or DEGRADED (service is serving). "
+        "HTTP 503 for UNHEALTHY (service cannot serve requests)."
+    ),
+)
+async def health(db=Depends(get_db)):
+    """
+    Full health diagnostic. May take up to 2s.
 
-    has_genai = False
-    try:
-        import google.generativeai
-        has_genai = True
-    except ImportError:
-        pass
+    HEALTHY:   All components operational.
+    DEGRADED:  Service is operational with reduced capacity or warnings.
+    UNHEALTHY: Service cannot safely serve requests.
+    """
+    # Provide db factory so the database probe can open its own session
+    from app.db.session import SessionLocal
 
-    has_openai = False
     try:
-        import openai
-        has_openai = True
-    except ImportError:
-        pass
+        # Import the globally started queue if available
+        from app.api.routes.v1.jobs_async import get_queue
+        queue = get_queue()
+    except Exception:
+        queue = None
 
-    return {
-        "status": "healthy",
-        "service": Config.APP_NAME,
-        "version": Config.VERSION,
-        "environment": Config.ENV,
-        "features": {
-            "ocr_engine": "PaddleOCR v4" if has_paddleocr else "unavailable",
-            "pdf_converter": "PyMuPDF" if has_pymupdf else "unavailable",
-            "vlm_gemini": "available" if has_genai else "unavailable",
-            "llm_openai": "available" if has_openai else "unavailable",
-            "chat_feature": "enabled" if (Config.GOOGLE_API_KEY or Config.OPENAI_API_KEY) else "offline_only",
-            "llm_provider": Config.LLM_PROVIDER,
-            "deploy_mode": Config.DEPLOY_MODE
-        }
-    }
+    checker = HealthChecker(
+        db_factory=SessionLocal,
+        queue=queue,
+    )
+    report = checker.check()
+
+    http_status = (
+        status.HTTP_200_OK
+        if report.is_serving
+        else status.HTTP_503_SERVICE_UNAVAILABLE
+    )
+
+    if not report.is_serving:
+        logger.error(
+            "Health check returned UNHEALTHY: %s",
+            [c.detail for c in report.components if c.level == HealthLevel.UNHEALTHY],
+        )
+    elif report.overall == HealthLevel.DEGRADED:
+        logger.warning(
+            "Health check returned DEGRADED: %s",
+            [c.detail for c in report.components if c.level == HealthLevel.DEGRADED],
+        )
+
+    return JSONResponse(
+        status_code=http_status,
+        content=report.to_dict(),
+    )
