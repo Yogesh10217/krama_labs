@@ -226,6 +226,14 @@ class Config:
     MAX_REQUEST_BODY_SIZE_MB: int = int(os.getenv("MAX_REQUEST_BODY_SIZE_MB", "50"))
     SECURITY_HEADERS_ENABLED: bool = os.getenv("SECURITY_HEADERS_ENABLED", "True").lower() in ("true", "1", "yes")
 
+    # ─── Phase 13: Analytics & Reporting ─────────────────────────────────────────
+    ENABLE_ANALYTICS: bool = os.getenv("ENABLE_ANALYTICS", "True").lower() in ("true", "1", "yes")
+    ENABLE_REPORTING: bool = os.getenv("ENABLE_REPORTING", "True").lower() in ("true", "1", "yes")
+    ENABLE_EXPORTS: bool = os.getenv("ENABLE_EXPORTS", "True").lower() in ("true", "1", "yes")
+    ANALYTICS_RETENTION_DAYS: int = int(os.getenv("ANALYTICS_RETENTION_DAYS", "365"))
+    REPORT_MAX_ROWS: int = int(os.getenv("REPORT_MAX_ROWS", "10000"))
+    EXPORT_TEMP_PATH: str = os.getenv("EXPORT_TEMP_PATH", "./exports")
+
     @classmethod
     def validate(cls) -> bool:
         """Validate critical configuration settings."""

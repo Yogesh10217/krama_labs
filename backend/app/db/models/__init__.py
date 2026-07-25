@@ -15,6 +15,10 @@ from app.db.models.job_execution import JobExecution, JobEvent, JobRetry
 from app.db.models.api_key import APIKey
 from app.db.models.refresh_token import RefreshToken
 from app.db.models.audit_log import AuditLog
+from app.db.models.analytics import (
+    DailyStatistics, ProviderStatistics, OrganizationStatistics,
+    CostStatistics, SLAStatistics, HistoricalMetric
+)
 
 __all__ = [
     "Organization",
@@ -43,5 +47,11 @@ __all__ = [
     "JobRetry",
     "APIKey",
     "RefreshToken",
-    "AuditLog"
+    "AuditLog",
+    "DailyStatistics",
+    "ProviderStatistics",
+    "OrganizationStatistics",
+    "CostStatistics",
+    "SLAStatistics",
+    "HistoricalMetric"
 ]

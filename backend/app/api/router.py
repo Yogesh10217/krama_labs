@@ -46,3 +46,9 @@ from app.api.routes import auth, apikeys
 
 v1_router.include_router(auth.router)
 v1_router.include_router(apikeys.router)
+
+# Phase 13: Analytics Routes
+from app.api.routes import analytics, admin
+
+v1_router.include_router(analytics.router)
+v1_router.include_router(admin.router)
