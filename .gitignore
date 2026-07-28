@@ -2,6 +2,13 @@
 .env
 *.env.local
 
+# Node.js dependencies & builds
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+
+
 # Python
 __pycache__/
 *.pyc
