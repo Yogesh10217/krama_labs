@@ -4,50 +4,50 @@ import type { Organization, Paginated } from "@/types";
 export const MOCK_ORGANIZATIONS: Organization[] = [
   {
     id: "org_1",
-    name: "Acme Corporation",
+    name: "Star Health & Allied Insurance",
     plan: "enterprise",
     status: "active",
     memberCount: 148,
     documentCount: 84200,
     storageUsedBytes: 1288490188800, // 1.2 TB
     storageQuotaBytes: 2199023255552, // 2.0 TB
-    domain: "acmecorp.com",
+    domain: "starhealth.in",
     createdAt: "2024-01-15T08:30:00Z",
   },
   {
     id: "org_2",
-    name: "Globex Inc",
+    name: "ICICI Lombard Claims Division",
     plan: "pro",
     status: "active",
     memberCount: 52,
     documentCount: 32800,
     storageUsedBytes: 579820584960, // 540 GB
     storageQuotaBytes: 1099511627776, // 1.0 TB
-    domain: "globex.com",
+    domain: "icicilombard.com",
     createdAt: "2024-03-10T14:15:00Z",
   },
   {
     id: "org_3",
-    name: "Soylent Corp",
+    name: "HDFC ERGO General Insurance",
     plan: "startup",
     status: "trial",
     memberCount: 21,
     documentCount: 18100,
     storageUsedBytes: 332859965440, // 310 GB
     storageQuotaBytes: 536870912000, // 500 GB
-    domain: "soylent.io",
+    domain: "hdfcergo.com",
     createdAt: "2024-06-01T09:00:00Z",
   },
   {
     id: "org_4",
-    name: "Initech LLC",
+    name: "Bajaj Allianz TPA Services",
     plan: "pro",
     status: "past_due",
     memberCount: 27,
     documentCount: 9400,
     storageUsedBytes: 161061273600, // 150 GB
     storageQuotaBytes: 536870912000, // 500 GB
-    domain: "initech.dev",
+    domain: "bajajallianz.com",
     createdAt: "2024-05-18T11:45:00Z",
   },
 ];

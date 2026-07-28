@@ -15,13 +15,12 @@ import { Section, SectionHeading, EASE } from "../components/section";
 
 const STEPS = [
   { icon: UploadCloud, title: "Upload", detail: "Drag, drop, or stream via API" },
-  { icon: RefreshCw, title: "Convert", detail: "Normalize to a canonical format" },
-  { icon: ScanText, title: "OCR", detail: "Ensemble text + layout recognition" },
+  { icon: ScanText, title: "OCR & AI Analysis", detail: "Ensemble text & layout recognition" },
   { icon: Tags, title: "Classification", detail: "Identify document type & schema" },
-  { icon: Sparkles, title: "Extraction", detail: "Typed fields with confidence" },
-  { icon: ShieldCheck, title: "Validation", detail: "Business rules & cross-checks" },
-  { icon: UserCheck, title: "Human Review", detail: "Only genuine edge cases" },
-  { icon: FilePieChart, title: "Reports", detail: "Delivered to your systems" },
+  { icon: Sparkles, title: "Extraction", detail: "Typed fields with confidence scores" },
+  { icon: ShieldCheck, title: "Validation", detail: "Business rules & fraud checks" },
+  { icon: UserCheck, title: "Human Review", detail: "Route edge cases to your team" },
+  { icon: FilePieChart, title: "Decision & Reporting", detail: "Auto-adjudicate & export API" },
 ];
 
 export function HowItWorksSection() {
@@ -58,7 +57,7 @@ export function HowItWorksSection() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <ol className="relative grid grid-cols-8 gap-2">
+          <ol className="relative grid grid-cols-7 gap-2">
             {STEPS.map((step, i) => (
               <motion.li
                 key={step.title}

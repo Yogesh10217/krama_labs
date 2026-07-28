@@ -11,28 +11,28 @@ const COMPARISONS = [
     dimension: "Speed",
     manual: "6–12 minutes per document, gated by analyst availability",
     krama: "Sub-second median page latency with unlimited parallelism",
-    delta: { value: 340, suffix: "×", label: "faster throughput" },
+    delta: { value: 23, suffix: " days", label: "cut from assessment" },
   },
   {
     icon: Target,
-    dimension: "Accuracy",
-    manual: "4–8% keying error rate that compounds downstream",
-    krama: "99.4% field accuracy with confidence-routed exception handling",
-    delta: { value: 96, suffix: "%", label: "fewer errors" },
+    dimension: "Cost Savings",
+    manual: "Rising manual processing costs and overhead per claim",
+    krama: "End-to-end automation of standard claims workflows",
+    delta: { value: 82, suffix: "M", label: "saved by Aviva in 1 yr" },
   },
   {
     icon: Workflow,
-    dimension: "Automation",
-    manual: "Copy-paste between inboxes, spreadsheets, and line-of-business apps",
-    krama: "Policy-driven pipelines with webhooks into your existing systems",
-    delta: { value: 92, suffix: "%", label: "touchless processing" },
+    dimension: "Customer Satisfaction",
+    manual: "Endless wait times lead to frustrated policyholders",
+    krama: "Instant claims approval or clear reasons for manual review",
+    delta: { value: 65, suffix: "%", label: "fewer complaints" },
   },
   {
     icon: Layers,
-    dimension: "Scalability",
-    manual: "Linear headcount growth to absorb seasonal volume spikes",
-    krama: "Elastic GPU capacity that absorbs 10× spikes without hiring",
-    delta: { value: 10, suffix: "×", label: "burst capacity" },
+    dimension: "ROI for AI Leaders",
+    manual: "Lagging peers struggle with legacy operating costs",
+    krama: "AI-native insurers vastly outperform traditional players",
+    delta: { value: 6.1, decimals: 1, suffix: "×", label: "shareholder returns" },
   },
   {
     icon: ScrollText,
@@ -47,14 +47,13 @@ export function WhyKramaSection() {
   return (
     <Section id="why">
       <SectionHeading
-        eyebrow="Why Krama AI"
+        eyebrow="McKinsey Validated"
         title={
           <>
-            Manual processing doesn&apos;t scale.{" "}
-            <span className="ai-gradient-text">Intelligence does.</span>
+            The data says <span className="ai-gradient-text">it all</span>
           </>
         }
-        description="A side-by-side look at what changes when document operations move from human keying to an AI-native pipeline with humans in the loop only where they add value."
+        description="McKinsey's July 2025 report confirms: Insurers that merely dabble in AI risk being left in the dust. See the real-world impact of AI claims processing vs manual workflows."
       />
 
       <motion.ul

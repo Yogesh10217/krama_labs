@@ -9,10 +9,11 @@ import { cn } from "@/lib/utils";
 import { EASE } from "../components/section";
 
 const NAV_LINKS = [
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Claim Types", href: "#claim-types" },
   { label: "Features", href: "#features" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Product", href: "#product" },
   { label: "Why Krama", href: "#why" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function LandingNav() {
@@ -73,7 +74,7 @@ export function LandingNav() {
         {/* Desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
           <Button variant="ghost" size="sm" className="text-[13px] text-foreground/70" asChild>
-            <Link href="/login">Sign in</Link>
+            <Link href="/login">Request Demo</Link>
           </Button>
           <Button
             size="sm"
@@ -81,7 +82,7 @@ export function LandingNav() {
             asChild
           >
             <Link href="/dashboard">
-              Start Processing
+              Get Early Access
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </Button>
@@ -122,10 +123,10 @@ export function LandingNav() {
             </div>
             <div className="mt-3 flex flex-col gap-2 border-t border-foreground/[0.07] pt-3">
               <Button variant="outline" className="glass w-full border-foreground/10" asChild>
-                <Link href="/login">Sign in</Link>
+                <Link href="/login">Request Demo</Link>
               </Button>
               <Button className="w-full border-0 ai-gradient-bg text-white" asChild>
-                <Link href="/dashboard">Start Processing</Link>
+                <Link href="/dashboard">Get Early Access</Link>
               </Button>
             </div>
           </motion.div>

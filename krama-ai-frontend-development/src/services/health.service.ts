@@ -42,7 +42,7 @@ export const MOCK_SYSTEM_HEALTH: SystemServiceHealth[] = [
     details: "High-priority queue latency < 200ms. Dead-letter queue contains 3 items.",
   },
   {
-    name: "OCR & Document Worker Pool",
+    name: "OCR & Claims Worker Pool",
     type: "worker",
     status: "degraded",
     uptimePct: 98.50,
@@ -52,7 +52,7 @@ export const MOCK_SYSTEM_HEALTH: SystemServiceHealth[] = [
       memoryPct: 91,
       connections: 32,
     },
-    details: "Worker pool #4 experienced memory pressure. Auto-scaling 2 additional instances.",
+    details: "Worker pool #4 experienced memory pressure on batch discharge summary parsing. Auto-scaling 2 additional instances.",
   },
   {
     name: "FastAPI Gateway Core",

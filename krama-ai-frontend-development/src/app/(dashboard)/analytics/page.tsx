@@ -42,18 +42,18 @@ const ocrAccuracy = [
 ];
 
 const extractionByType = [
-  { name: "Invoices", success: 96, review: 3, failed: 1 },
-  { name: "Contracts", success: 89, review: 9, failed: 2 },
-  { name: "Receipts", success: 93, review: 5, failed: 2 },
-  { name: "Tax Forms", success: 91, review: 7, failed: 2 },
-  { name: "ID Docs", success: 97, review: 2, failed: 1 },
+  { name: "Discharge Summaries", success: 96, review: 3, failed: 1 },
+  { name: "Hospital Bills", success: 94, review: 5, failed: 1 },
+  { name: "Motor Repair Estimates", success: 91, review: 7, failed: 2 },
+  { name: "Pre-Auth Forms", success: 97, review: 2, failed: 1 },
+  { name: "Pharmacy Receipts", success: 92, review: 6, failed: 2 },
 ];
 
 const orgUsage = [
-  { name: "Acme Corporation", docs: 84200, cost: "$6,410", storage: "1.2 TB", pct: 58 },
-  { name: "Globex Inc", docs: 32800, cost: "$2,940", storage: "540 GB", pct: 23 },
-  { name: "Soylent Corp", docs: 18100, cost: "$1,610", storage: "310 GB", pct: 12 },
-  { name: "Initech LLC", docs: 9400, cost: "$860", storage: "150 GB", pct: 7 },
+  { name: "Star Health & Allied Insurance", docs: 84200, cost: "$6,410", storage: "1.2 TB", pct: 58 },
+  { name: "ICICI Lombard Claims Division", docs: 32800, cost: "$2,940", storage: "540 GB", pct: 23 },
+  { name: "HDFC ERGO General Insurance", docs: 18100, cost: "$1,610", storage: "310 GB", pct: 12 },
+  { name: "Bajaj Allianz TPA Services", docs: 9400, cost: "$860", storage: "150 GB", pct: 7 },
 ];
 
 export default function AnalyticsPage() {

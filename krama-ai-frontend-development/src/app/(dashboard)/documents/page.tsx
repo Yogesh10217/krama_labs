@@ -30,12 +30,12 @@ import { PageContainer, PageHeader } from "@/components/shared/page";
 import { StatusBadge } from "@/components/shared/status-badge";
 
 const documents = [
-  { id: "DOC-8921", name: "Q4_Financial_Report_Final.pdf", type: "PDF", size: "2.4 MB", status: "extracted", date: "Oct 24, 2024" },
-  { id: "DOC-8920", name: "MSA_TechCorp_Signed.docx", type: "DOCX", size: "1.1 MB", status: "processing", date: "Oct 24, 2024" },
-  { id: "DOC-8919", name: "Employee_Handbook_2025.pdf", type: "PDF", size: "5.7 MB", status: "extracted", date: "Oct 23, 2024" },
-  { id: "DOC-8918", name: "Invoice_INV-0042.jpg", type: "IMAGE", size: "850 KB", status: "failed", date: "Oct 23, 2024" },
-  { id: "DOC-8917", name: "Tax_Returns_2023.pdf", type: "PDF", size: "14.2 MB", status: "extracted", date: "Oct 22, 2024" },
-  { id: "DOC-8916", name: "Q3_Board_Deck.pptx", type: "PPTX", size: "22.5 MB", status: "extracted", date: "Oct 21, 2024" },
+  { id: "DOC-8921", name: "Commercial_Invoice_INV-8921.pdf", type: "PDF", size: "2.4 MB", status: "extracted", date: "Oct 24, 2024" },
+  { id: "DOC-8920", name: "Health_Insurance_Claim_CLM-8920.pdf", type: "PDF", size: "1.8 MB", status: "processing", date: "Oct 24, 2024" },
+  { id: "DOC-8919", name: "Master_Service_Agreement_MSA-8919.docx", type: "DOCX", size: "5.7 MB", status: "extracted", date: "Oct 23, 2024" },
+  { id: "DOC-8918", name: "Bill_of_Lading_BOL-8918.jpg", type: "IMAGE", size: "850 KB", status: "failed", date: "Oct 23, 2024" },
+  { id: "DOC-8917", name: "Purchase_Order_PO-8917.pdf", type: "PDF", size: "3.2 MB", status: "extracted", date: "Oct 22, 2024" },
+  { id: "DOC-8916", name: "W2_Tax_Form_2024.pdf", type: "PDF", size: "1.5 MB", status: "extracted", date: "Oct 21, 2024" },
 ];
 
 export default function DocumentsPage() {

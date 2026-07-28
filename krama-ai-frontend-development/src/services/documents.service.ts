@@ -6,11 +6,11 @@ import { apiClient } from "./api-client";
 import type { DocumentDetail, DocumentSummary, Paginated, ReviewDecision } from "@/types";
 
 export const MOCK_DOCUMENTS: DocumentSummary[] = [
-  { id: "DOC-8922", name: "Invoice_XCorp_Q3.pdf", mimeType: "application/pdf", sizeBytes: 2450000, status: "review", organizationId: "org_1", createdAt: "2024-07-28T14:20:00Z" },
-  { id: "DOC-8921", name: "Q4_Financial_Report_Final.pdf", mimeType: "application/pdf", sizeBytes: 8120000, status: "extracted", organizationId: "org_1", createdAt: "2024-07-28T12:00:00Z" },
-  { id: "DOC-8920", name: "MSA_TechCorp_Signed.docx", mimeType: "application/msword", sizeBytes: 1100000, status: "processing", organizationId: "org_1", createdAt: "2024-07-28T10:15:00Z" },
-  { id: "DOC-8919", name: "Employee_Handbook_2025.pdf", mimeType: "application/pdf", sizeBytes: 4200000, status: "extracted", organizationId: "org_1", createdAt: "2024-07-27T16:45:00Z" },
-  { id: "DOC-8918", name: "Receipt_Scan_Travel.jpg", mimeType: "image/jpeg", sizeBytes: 850000, status: "failed", organizationId: "org_1", createdAt: "2024-07-27T11:30:00Z" },
+  { id: "DOC-8922", name: "Commercial_Invoice_INV-8922.pdf", mimeType: "application/pdf", sizeBytes: 2450000, status: "review", organizationId: "org_1", createdAt: "2024-07-28T14:20:00Z" },
+  { id: "DOC-8921", name: "Q4_Financial_Statement_2025.pdf", mimeType: "application/pdf", sizeBytes: 8120000, status: "extracted", organizationId: "org_1", createdAt: "2024-07-28T12:00:00Z" },
+  { id: "DOC-8920", name: "Master_Service_Agreement_MSA-8920.docx", mimeType: "application/msword", sizeBytes: 1100000, status: "processing", organizationId: "org_1", createdAt: "2024-07-28T10:15:00Z" },
+  { id: "DOC-8919", name: "Health_Insurance_Claim_CLM-8919.pdf", mimeType: "application/pdf", sizeBytes: 4200000, status: "extracted", organizationId: "org_1", createdAt: "2024-07-27T16:45:00Z" },
+  { id: "DOC-8918", name: "Bill_of_Lading_Scan_001.jpg", mimeType: "image/jpeg", sizeBytes: 850000, status: "failed", organizationId: "org_1", createdAt: "2024-07-27T11:30:00Z" },
 ];
 
 export const documentsService = {
@@ -45,7 +45,7 @@ export const documentsService = {
         fields: [
           { key: "invoice_number", value: "INV-2024-9981", confidence: 0.99, needsReview: false },
           { key: "total_amount", value: "$42,850.00", confidence: 0.97, needsReview: false },
-          { key: "vendor_name", value: "XCorp Global Logistics", confidence: 0.94, needsReview: false },
+          { key: "vendor_name", value: "Apex Global Logistics", confidence: 0.94, needsReview: false },
           { key: "tax_amount", value: "$3,856.50", confidence: 0.82, needsReview: true },
           { key: "payment_terms", value: "Net 30", confidence: 0.91, needsReview: false },
         ],

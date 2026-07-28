@@ -63,9 +63,9 @@ function FloatingGeometry() {
 }
 
 const HERO_STATS = [
-  { value: 142, suffix: "M+", label: "Pages processed" },
+  { value: 8000, suffix: " Cr", label: "Fraud Prevented" },
   { value: 99.4, decimals: 1, suffix: "%", label: "Extraction accuracy" },
-  { value: 0.8, decimals: 1, suffix: "s", label: "Median latency" },
+  { value: 8, suffix: "x", label: "Faster Processing" },
 ];
 
 export function Hero() {
@@ -98,10 +98,10 @@ export function Hero() {
           <motion.div variants={fadeUp}>
             <div className="inline-flex items-center gap-2 glass rounded-full py-1.5 pl-1.5 pr-3.5">
               <span className="rounded-full ai-gradient-bg px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
-                New
+                🚀 Early Access
               </span>
               <span className="text-xs font-medium text-foreground/70">
-                Krama Extract v2 — 128k context OCR
+                Building with India's Top Insurers
               </span>
             </div>
           </motion.div>
@@ -110,16 +110,15 @@ export function Hero() {
             variants={fadeUp}
             className="max-w-[15ch] text-balance text-[40px] font-semibold leading-[1.03] tracking-tight sm:text-[54px] lg:text-[62px]"
           >
-            Transform Enterprise Documents into{" "}
-            <span className="ai-gradient-text">Actionable Intelligence</span>
+            Document Intelligence for{" "}
+            <span className="ai-gradient-text">Insurance Professionals</span>
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
             className="max-w-xl text-pretty text-base leading-relaxed text-foreground/60 md:text-lg"
           >
-            Upload, analyze, classify, extract, validate, and automate enterprise
-            document workflows using AI-powered OCR and intelligent processing.
+            Domain-specific AI that turns discharge summaries, repair estimates, and claim forms into validated, fraud-checked decisions in minutes, not days.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3">
@@ -129,7 +128,7 @@ export function Hero() {
               asChild
             >
               <Link href="/dashboard">
-                Start Processing
+                Get Early Access
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
@@ -143,7 +142,7 @@ export function Hero() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground/[0.08] transition-colors group-hover:bg-foreground/[0.14]">
                   <Play className="h-2.5 w-2.5 fill-current" />
                 </span>
-                Watch Demo
+                Learn More
               </Link>
             </Button>
           </motion.div>

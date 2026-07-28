@@ -219,17 +219,17 @@ interface Feature {
 const FEATURES: Feature[] = [
   {
     icon: ScanText,
-    title: "AI OCR",
+    title: "AI Vision OCR",
     description:
-      "Ensemble optical recognition across printed, handwritten, and low-quality scans with per-character confidence.",
+      "Reads printed text, handwriting, stamps, and signatures from any Indian document format with per-character confidence.",
     illustration: IllusScan,
     span: true,
   },
   {
     icon: Sparkles,
-    title: "Smart Extraction",
+    title: "Field Extraction",
     description:
-      "Schema-aware field extraction with entity linking that turns unstructured pages into typed JSON.",
+      "Schema-aware extraction and layout analysis that turns unstructured discharge summaries and bills into typed JSON.",
     illustration: IllusExtract,
     span: true,
   },
@@ -237,28 +237,28 @@ const FEATURES: Feature[] = [
     icon: UserCheck,
     title: "Human Review",
     description:
-      "Confidence-routed review queues with side-by-side OCR overlays and full version history.",
+      "Confidence-routed review queues with side-by-side OCR overlays and full version history for edge cases.",
     illustration: IllusReview,
   },
   {
     icon: BarChart3,
     title: "Analytics",
     description:
-      "Executive dashboards for volume, accuracy, cost, and provider performance across every tenant.",
+      "Executive dashboards for claim volumes, accuracy, cost, and provider performance across every tenant.",
     illustration: IllusAnalytics,
   },
   {
     icon: FilePieChart,
-    title: "Reports",
+    title: "Enterprise Reporting",
     description:
-      "Scheduled PDF and CSV reporting delivered to stakeholders on your cadence, automatically.",
+      "Scheduled PDF and CSV reporting for IRDAI SLA compliance delivered to stakeholders automatically.",
     illustration: IllusReports,
   },
   {
     icon: Workflow,
-    title: "Workflow Automation",
+    title: "Validation Engine",
     description:
-      "Compose upload, classify, extract, validate, and approve into pipelines with webhook triggers.",
+      "Cross-verify claims against policy rules, waiting periods, sub-limits, and network hospital lists.",
     illustration: IllusWorkflow,
   },
   {
@@ -270,9 +270,9 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Lock,
-    title: "Enterprise Security",
+    title: "Security & RBAC",
     description:
-      "SSO, SCIM, granular RBAC, customer-managed keys, and immutable audit trails by default.",
+      "Isolated multi-tenant architecture with granular RBAC, customer-managed keys, and immutable audit logs.",
     illustration: IllusSecurity,
   },
 ];
@@ -284,8 +284,8 @@ export function FeaturesSection() {
         eyebrow="Platform capabilities"
         title={
           <>
-            Everything you need to operationalize{" "}
-            <span className="ai-gradient-text">document intelligence</span>
+            Everything you need to automate{" "}
+            <span className="ai-gradient-text">insurance claims</span>
           </>
         }
         description="A complete pipeline — from raw upload to validated, auditable output — delivered as one coherent platform instead of a stack of point tools."

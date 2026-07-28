@@ -14,11 +14,11 @@ import {
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, Mock: DashboardMockup, blurb: "Executive overview of volume, accuracy, cost, and live pipeline state." },
-  { id: "upload", label: "Upload", icon: UploadCloud, Mock: UploadMockup, blurb: "Drag-and-drop ingestion with validation, batching, and live progress." },
-  { id: "viewer", label: "Document Viewer", icon: FileSearch, Mock: ViewerMockup, blurb: "Split-screen OCR overlay with editable fields and confidence scoring." },
-  { id: "review", label: "Human Review", icon: UserCheck, Mock: ReviewMockup, blurb: "Prioritized queues so reviewers only touch genuine exceptions." },
-  { id: "analytics", label: "Analytics", icon: BarChart3, Mock: AnalyticsMockup, blurb: "Cost, provider, OCR, and extraction metrics across every tenant." },
+  { id: "health", label: "Health Claims", icon: LayoutDashboard, Mock: DashboardMockup, blurb: "Process discharge summaries, hospital bills, pharmacy receipts, and lab reports." },
+  { id: "motor", label: "Motor Claims", icon: UploadCloud, Mock: UploadMockup, blurb: "Extract data from police FIRs, repair estimates, and surveyor reports." },
+  { id: "life", label: "Life Claims", icon: FileSearch, Mock: ViewerMockup, blurb: "Validate death certificates, nominee forms, and KYC compliance documents." },
+  { id: "hospital", label: "Hospital Documents", icon: UserCheck, Mock: ReviewMockup, blurb: "Reconcile cashless authorization requests and TPA pre-auth forms." },
+  { id: "policy", label: "Policy Documents", icon: BarChart3, Mock: AnalyticsMockup, blurb: "Verify claims against policy rules, waiting periods, and network hospital lists." },
 ] as const;
 
 export function ProductPreviewSection() {
@@ -27,16 +27,16 @@ export function ProductPreviewSection() {
   const ActiveMock = current.Mock;
 
   return (
-    <Section id="product">
+    <Section id="claim-types">
       <SectionHeading
-        eyebrow="Product tour"
+        eyebrow="Claim Types"
         title={
           <>
-            A workspace designed for{" "}
-            <span className="ai-gradient-text">operators, not admins</span>
+            Every claim type,{" "}
+            <span className="ai-gradient-text">every document</span>
           </>
         }
-        description="Every surface is built around throughput — dense where it matters, calm everywhere else, and consistent from ingestion through to reporting."
+        description="From motor accidents to hospital cashless, we process every claim document Indian insurers handle through a unified workspace."
       />
 
       {/* Tab switcher */}

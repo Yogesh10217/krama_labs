@@ -25,9 +25,9 @@ import { PageContainer, PageHeader } from "@/components/shared/page";
 
 // Mock upload history
 const uploadHistory = [
-  { id: "h1", name: "Q3_Earnings_Report.pdf", size: "4.2 MB", date: "Today, 10:42 AM", status: "completed" },
-  { id: "h2", name: "Contract_AcmeCorp_Signed.pdf", size: "1.8 MB", date: "Today, 09:15 AM", status: "completed" },
-  { id: "h3", name: "Receipt_Scan_001.jpg", size: "3.1 MB", date: "Yesterday, 16:30 PM", status: "failed", error: "Blurry image" },
+  { id: "h1", name: "Q4_Financial_Statement_2025.pdf", size: "4.2 MB", date: "Today, 10:42 AM", status: "completed" },
+  { id: "h2", name: "Commercial_Invoice_INV-8921.pdf", size: "1.8 MB", date: "Today, 09:15 AM", status: "completed" },
+  { id: "h3", name: "Bill_of_Lading_Scan_001.jpg", size: "3.1 MB", date: "Yesterday, 16:30 PM", status: "failed", error: "Low resolution scan" },
 ];
 
 interface UploadFile extends File {

@@ -59,17 +59,15 @@ export function CtaSection() {
             variants={fadeUp}
             className="max-w-[18ch] text-balance text-[32px] font-semibold leading-[1.08] tracking-tight md:text-[48px]"
           >
-            Ready to Modernize Your{" "}
-            <span className="ai-gradient-text">Document Processing?</span>
+            Ready to automate your{" "}
+            <span className="ai-gradient-text">claims processing?</span>
           </motion.h2>
 
           <motion.p
             variants={fadeUp}
             className="max-w-xl text-pretty text-base leading-relaxed text-foreground/60"
           >
-            Join the teams replacing manual keying with an auditable, AI-native
-            pipeline. Start in a sandbox today, or talk to our solutions engineers
-            about a private deployment.
+            Stop paying 4.5 days per claim for manual document processing. Get a personalized walkthrough of how Krama AI can transform your claims operations.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3">
@@ -90,7 +88,7 @@ export function CtaSection() {
               asChild
             >
               <Link href="/dashboard">
-                Start Free Trial
+                Get Early Access
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>

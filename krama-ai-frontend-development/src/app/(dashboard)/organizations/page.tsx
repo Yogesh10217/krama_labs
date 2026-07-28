@@ -81,7 +81,7 @@ export default function OrganizationsPage() {
                   <Label htmlFor="name">Organization Name</Label>
                   <Input
                     id="name"
-                    placeholder="e.g. Nexus Dynamics"
+                    placeholder="e.g. Apex Financial Global"
                     value={newOrgName}
                     onChange={(e) => setNewOrgName(e.target.value)}
                     required
@@ -91,7 +91,7 @@ export default function OrganizationsPage() {
                   <Label htmlFor="domain">Primary Domain</Label>
                   <Input
                     id="domain"
-                    placeholder="e.g. nexus.com"
+                    placeholder="e.g. apexfinancial.com"
                     value={newOrgDomain}
                     onChange={(e) => setNewOrgDomain(e.target.value)}
                   />

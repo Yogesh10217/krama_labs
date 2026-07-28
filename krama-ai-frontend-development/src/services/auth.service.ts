@@ -60,10 +60,10 @@ export const authService = {
       return await apiClient.get<SessionUser>("/auth/me");
     } catch {
       return {
-        name: "Alice Donovan",
-        email: "alice@acmecorp.com",
-        role: "Owner",
-        initials: "AD",
+        name: "Krama Admin",
+        email: "admin@krama.ai",
+        role: "Enterprise Admin",
+        initials: "KA",
       };
     }
   },

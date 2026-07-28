@@ -203,7 +203,7 @@ export default function UsersPage() {
                             {user.role}
                           </span>
                         </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{user.organizationName || "Acme Corporation"}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground">{user.organizationName || "Apex Financial Global"}</TableCell>
                         <TableCell>
                           {user.mfaEnabled ? (
                             <Badge variant="outline" className="text-[10px] text-green-500 border-green-500/20 bg-green-500/10 gap-1">

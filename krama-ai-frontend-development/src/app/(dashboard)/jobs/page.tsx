@@ -13,12 +13,12 @@ import { Search, RefreshCw, ServerCog, Loader2, CheckCircle2, XCircle, PauseCirc
 import { AnalyticsHeader, KpiCard } from "@/features/analytics/components";
 
 const jobs = [
-  { id: "job_991", type: "Batch Extraction", org: "Acme Corporation", docs: 512, progress: 74, status: "running", started: "10:12 UTC", eta: "14m" },
-  { id: "job_992", type: "Entity Linking", org: "Acme Corporation", docs: 128, progress: 31, status: "running", started: "10:48 UTC", eta: "26m" },
-  { id: "job_989", type: "OCR Reprocess", org: "Globex Inc", docs: 2048, progress: 100, status: "completed", started: "08:20 UTC", eta: "—" },
-  { id: "job_986", type: "Batch Extraction", org: "Soylent Corp", docs: 64, progress: 100, status: "completed", started: "07:44 UTC", eta: "—" },
-  { id: "job_984", type: "Schema Migration", org: "Initech LLC", docs: 320, progress: 12, status: "paused", started: "06:10 UTC", eta: "—" },
-  { id: "job_981", type: "Batch Extraction", org: "Globex Inc", docs: 96, progress: 44, status: "failed", started: "05:52 UTC", eta: "—" },
+  { id: "job_991", type: "Batch Extraction", org: "Apex Financial Global", docs: 512, progress: 74, status: "running", started: "10:12 UTC", eta: "14m" },
+  { id: "job_992", type: "Entity Linking", org: "Apex Financial Global", docs: 128, progress: 31, status: "running", started: "10:48 UTC", eta: "26m" },
+  { id: "job_989", type: "OCR Reprocess", org: "Nexus Healthcare Group", docs: 2048, progress: 100, status: "completed", started: "08:20 UTC", eta: "—" },
+  { id: "job_986", type: "Batch Extraction", org: "Vertex Global Logistics", docs: 64, progress: 100, status: "completed", started: "07:44 UTC", eta: "—" },
+  { id: "job_984", type: "Schema Migration", org: "Horizon Insurance Systems", docs: 320, progress: 12, status: "paused", started: "06:10 UTC", eta: "—" },
+  { id: "job_981", type: "Batch Extraction", org: "Nexus Healthcare Group", docs: 96, progress: 44, status: "failed", started: "05:52 UTC", eta: "—" },
 ];
 
 const statusConfig = {

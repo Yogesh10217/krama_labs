@@ -220,10 +220,10 @@ export const QUICK_ACTIONS: CommandItem[] = [
 
 /* Recent documents surfaced in the palette. */
 export const PALETTE_DOCUMENTS: CommandItem[] = [
-  { id: "doc-8922", label: "Invoice_XCorp_Q3.pdf", hint: "DOC-8922 · Needs review", icon: FileText, group: "documents", href: "/documents/DOC-8922" },
-  { id: "doc-8921", label: "Q4_Financial_Report_Final.pdf", hint: "DOC-8921 · Extracted", icon: FileText, group: "documents", href: "/documents/DOC-8921" },
-  { id: "doc-8920", label: "MSA_TechCorp_Signed.docx", hint: "DOC-8920 · Processing", icon: FileText, group: "documents", href: "/documents/DOC-8920" },
-  { id: "doc-8919", label: "Employee_Handbook_2025.pdf", hint: "DOC-8919 · Extracted", icon: FileText, group: "documents", href: "/documents/DOC-8919" },
+  { id: "doc-8922", label: "Commercial_Invoice_INV-8922.pdf", hint: "DOC-8922 · Human Review Required", icon: FileText, group: "documents", href: "/documents/DOC-8922" },
+  { id: "doc-8921", label: "Q4_Financial_Statement_2025.pdf", hint: "DOC-8921 · OCR & Classification Complete", icon: FileText, group: "documents", href: "/documents/DOC-8921" },
+  { id: "doc-8920", label: "Master_Service_Agreement_MSA-8920.pdf", hint: "DOC-8920 · Validation Pending", icon: FileText, group: "documents", href: "/documents/DOC-8920" },
+  { id: "doc-8919", label: "Health_Insurance_Claim_CLM-8919.pdf", hint: "DOC-8919 · Approved & Synced", icon: FileText, group: "documents", href: "/documents/DOC-8919" },
 ];
 
 /* Account-level palette entries. */
@@ -231,10 +231,9 @@ export const PALETTE_ACCOUNT: CommandItem[] = [
   { id: "acct-profile", label: "My Profile", icon: UserCircle, group: "account", href: "/settings#general" },
   { id: "acct-security", label: "Security", icon: ShieldCheck, group: "account", href: "/settings#general" },
   { id: "acct-notifications", label: "Notification preferences", icon: Bell, group: "account", href: "/settings#general" },
-  { id: "acct-appearance", label: "Appearance", icon: SlidersHorizontal, group: "account", href: "/settings#general" },
-  { id: "acct-billing", label: "Billing", icon: CreditCard, group: "account", href: "/settings#billing" },
+  { id: "acct-billing", label: "Billing & Quotas", icon: CreditCard, group: "account", href: "/settings#billing" },
   { id: "acct-audit", label: "Audit logs", icon: ScrollText, group: "account", href: "/settings#audit" },
-  { id: "acct-help", label: "Help & documentation", icon: LifeBuoy, group: "account", href: "#" },
+  { id: "acct-help", label: "Help & Documentation", icon: LifeBuoy, group: "account", href: "#" },
 ];
 
 export const COMMAND_GROUP_LABELS: Record<string, string> = {
@@ -247,28 +246,29 @@ export const COMMAND_GROUP_LABELS: Record<string, string> = {
 export const PALETTE_SEARCH_ICON = Search;
 
 /* ------------------------------------------------------------------ *
- * Placeholder session data (no backend).
+ * Krama AI Enterprise Session Data
  * ------------------------------------------------------------------ */
 
 export const CURRENT_USER: SessionUser = {
-  name: "Alice Donovan",
-  email: "alice@acmecorp.com",
-  role: "Owner",
-  initials: "AD",
+  name: "Krama Admin",
+  email: "admin@krama.ai",
+  role: "Enterprise Admin",
+  initials: "KA",
 };
 
 export const WORKSPACES: Workspace[] = [
-  { id: "org_1", name: "Acme Corporation", plan: "Enterprise", domain: "acmecorp.com" },
-  { id: "org_2", name: "Globex Inc", plan: "Pro", domain: "globex.com" },
-  { id: "org_3", name: "Soylent Corp", plan: "Startup", domain: "soylent.io" },
+  { id: "org_1", name: "Star Health Insurance", plan: "Enterprise", domain: "starhealth.in" },
+  { id: "org_2", name: "ICICI Lombard Claims", plan: "Enterprise", domain: "icicilombard.com" },
+  { id: "org_3", name: "HDFC ERGO General", plan: "Enterprise", domain: "hdfcergo.com" },
+  { id: "org_4", name: "Bajaj Allianz TPA", plan: "Enterprise", domain: "bajajallianz.com" },
 ];
 
 export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n1",
     kind: "warning",
-    title: "5 documents need human review",
-    description: "Low-confidence extractions detected in the Acme queue.",
+    title: "5 documents require human review",
+    description: "Low OCR confidence scores detected in invoice line items.",
     timestamp: "2m ago",
     href: "/review",
     read: false,
@@ -276,8 +276,8 @@ export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n2",
     kind: "success",
-    title: "Batch job completed",
-    description: "job_989 processed 2,048 documents with 99.6% accuracy.",
+    title: "Batch OCR processing finished",
+    description: "Job #989 parsed 2,048 medical claims with 99.6% field accuracy.",
     timestamp: "1h ago",
     href: "/jobs",
     read: false,
@@ -285,8 +285,8 @@ export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n3",
     kind: "processing",
-    title: "Entity linking in progress",
-    description: "job_992 is 31% complete — 45 documents remaining.",
+    title: "Document classification in progress",
+    description: "Job #992 is 31% complete — 45 shipping manifests remaining.",
     timestamp: "1h ago",
     href: "/jobs",
     read: false,
@@ -294,8 +294,8 @@ export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n4",
     kind: "error",
-    title: "Extraction failed",
-    description: "Invoice_Scan_Travel.jpg could not be parsed — image too blurry.",
+    title: "Layout parsing exception",
+    description: "Purchase_Order_Scan_789.pdf failed validation — unreadable resolution.",
     timestamp: "3h ago",
     href: "/documents",
     read: true,
@@ -303,8 +303,8 @@ export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n5",
     kind: "system",
-    title: "Provider failover triggered",
-    description: "Internal GPU cluster degraded — traffic rerouted to OpenAI.",
+    title: "AI Provider failover triggered",
+    description: "Primary GPU cluster latency elevated — traffic routed to OpenAI Azure Gateway.",
     timestamp: "5h ago",
     href: "/providers",
     read: true,
@@ -312,8 +312,8 @@ export const NOTIFICATIONS: AppNotification[] = [
   {
     id: "n6",
     kind: "success",
-    title: "Monthly report generated",
-    description: "Executive Summary for October is ready to download.",
+    title: "Audit summary report ready",
+    description: "Monthly Field Extraction & Accuracy Report is ready to download.",
     timestamp: "Yesterday",
     href: "/reports",
     read: true,
@@ -321,9 +321,9 @@ export const NOTIFICATIONS: AppNotification[] = [
 ];
 
 export const RECENT_ACTIVITY: ActivityEntry[] = [
-  { id: "a1", actor: "You", action: "approved", target: "Invoice_XCorp_Q3.pdf", timestamp: "4m ago", href: "/documents/DOC-8922" },
-  { id: "a2", actor: "Ben Kessler", action: "uploaded", target: "12 documents", timestamp: "22m ago", href: "/documents" },
-  { id: "a3", actor: "System", action: "completed", target: "job_989", timestamp: "1h ago", href: "/jobs" },
-  { id: "a4", actor: "Clara Nguyen", action: "rejected", target: "Receipt_Scan_Travel.jpg", timestamp: "2h ago", href: "/review" },
-  { id: "a5", actor: "You", action: "rolled", target: "Production API key", timestamp: "Yesterday", href: "/settings#api" },
+  { id: "a1", actor: "You", action: "approved", target: "Commercial_Invoice_INV-8922.pdf", timestamp: "4m ago", href: "/documents/DOC-8922" },
+  { id: "a2", actor: "Elena Vance", action: "ingested", target: "12 Insurance Claim PDFs", timestamp: "22m ago", href: "/documents" },
+  { id: "a3", actor: "System Pipeline", action: "completed", target: "OCR Extraction Job #989", timestamp: "1h ago", href: "/jobs" },
+  { id: "a4", actor: "Marcus Sterling", action: "rejected", target: "W2_Form_Scan_Invalid.jpg", timestamp: "2h ago", href: "/review" },
+  { id: "a5", actor: "You", action: "rotated", target: "Production FastAPI Secret Key", timestamp: "Yesterday", href: "/settings#api" },
 ];

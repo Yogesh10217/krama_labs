@@ -9,16 +9,16 @@ import { FilePieChart, Clock, Plus, Download, CalendarClock, FileSpreadsheet, Fi
 import { ExportDialog, AnalyticsHeader } from "@/features/analytics/components";
 
 const scheduledReports = [
-  { id: "rep_1", name: "Monthly Executive Summary", cadence: "Monthly · 1st, 08:00 UTC", recipients: 4, format: "PDF", lastRun: "Oct 1, 2024" },
-  { id: "rep_2", name: "Weekly Cost Breakdown", cadence: "Weekly · Mon, 06:00 UTC", recipients: 2, format: "CSV", lastRun: "Oct 21, 2024" },
-  { id: "rep_3", name: "Provider SLA Compliance", cadence: "Weekly · Fri, 17:00 UTC", recipients: 6, format: "PDF", lastRun: "Oct 18, 2024" },
+  { id: "rep_1", name: "Monthly Claims Adjudication & Fraud Audit", cadence: "Monthly · 1st, 08:00 UTC", recipients: 6, format: "PDF", lastRun: "Oct 1, 2024" },
+  { id: "rep_2", name: "Hospital Tariff & Deduction Breakdown", cadence: "Weekly · Mon, 06:00 UTC", recipients: 4, format: "CSV", lastRun: "Oct 21, 2024" },
+  { id: "rep_3", name: "IRDAI SLA & Pre-Auth Compliance", cadence: "Weekly · Fri, 17:00 UTC", recipients: 8, format: "PDF", lastRun: "Oct 18, 2024" },
 ];
 
 const recentReports = [
-  { id: "run_991", name: "Monthly Executive Summary — October", generated: "Oct 1, 2024 08:01 UTC", size: "4.1 MB", format: "PDF", status: "ready" },
-  { id: "run_990", name: "Weekly Cost Breakdown — W43", generated: "Oct 21, 2024 06:00 UTC", size: "820 KB", format: "CSV", status: "ready" },
-  { id: "run_989", name: "Provider SLA Compliance — W42", generated: "Oct 18, 2024 17:02 UTC", size: "2.7 MB", format: "PDF", status: "ready" },
-  { id: "run_988", name: "Ad-hoc: Legal Docs Audit", generated: "Oct 16, 2024 11:34 UTC", size: "—", format: "CSV", status: "generating" },
+  { id: "run_991", name: "Monthly Claims Adjudication — October", generated: "Oct 1, 2024 08:01 UTC", size: "4.1 MB", format: "PDF", status: "ready" },
+  { id: "run_990", name: "Hospital Tariff & Room Rent Deductions — W43", generated: "Oct 21, 2024 06:00 UTC", size: "820 KB", format: "CSV", status: "ready" },
+  { id: "run_989", name: "IRDAI Pre-Auth Turnaround SLA — W42", generated: "Oct 18, 2024 17:02 UTC", size: "2.7 MB", format: "PDF", status: "ready" },
+  { id: "run_988", name: "Ad-hoc: Motor Repair Estimate Anomaly Audit", generated: "Oct 16, 2024 11:34 UTC", size: "1.4 MB", format: "CSV", status: "ready" },
 ];
 
 export default function ReportsPage() {

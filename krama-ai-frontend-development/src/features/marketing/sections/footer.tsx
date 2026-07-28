@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { BrainCircuit, Globe, Mail } from "lucide-react";
 import { EASE } from "../components/section";
 
-/* Brand marks as inline SVG (lucide no longer ships brand icons). */
 type IconProps = { className?: string };
 
 const GithubIcon = ({ className }: IconProps) => (
@@ -30,31 +29,17 @@ const COLUMNS = [
   {
     heading: "Product",
     links: [
-      { label: "Dashboard", href: "/dashboard" },
-      { label: "Upload", href: "/upload" },
-      { label: "Human Review", href: "/review" },
-      { label: "Analytics", href: "/analytics" },
-      { label: "Models", href: "/models" },
+      { label: "How It Works", href: "#how-it-works" },
+      { label: "Claim Types", href: "#claim-types" },
+      { label: "Features", href: "#features" },
+      { label: "Why Krama", href: "#why" },
     ],
   },
   {
     heading: "Company",
     links: [
       { label: "About", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Customers", href: "#" },
-      { label: "Newsroom", href: "#" },
-      { label: "Security", href: "#trust" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Documentation", href: "#" },
-      { label: "API Reference", href: "#" },
-      { label: "Changelog", href: "#" },
-      { label: "System Status", href: "/health" },
-      { label: "Support", href: "#" },
+      { label: "Contact", href: "#" },
     ],
   },
   {
@@ -62,9 +47,7 @@ const COLUMNS = [
     links: [
       { label: "Privacy Policy", href: "#" },
       { label: "Terms of Service", href: "#" },
-      { label: "Data Processing", href: "#" },
-      { label: "Sub-processors", href: "#" },
-      { label: "Contact", href: "#" },
+      { label: "Security", href: "#" },
     ],
   },
 ];
@@ -115,8 +98,10 @@ export function LandingFooter() {
             </Link>
 
             <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-foreground/45">
-              Enterprise AI Document Intelligence. Turn unstructured documents into
-              validated, auditable data at any scale.
+              Krama transforms unstructured insurance documents into actionable, validated claims intelligence for insurers and TPAs.
+            </p>
+            <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-foreground/45">
+              Built by an engineer from Bengaluru, Karnataka, India.
             </p>
 
             <div className="mt-5 flex items-center gap-2">
@@ -172,10 +157,10 @@ export function LandingFooter() {
         {/* Bottom bar */}
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-foreground/[0.07] pt-7 sm:flex-row">
           <p className="text-xs text-foreground/35">
-            © {new Date().getFullYear()} Krama AI, Inc. All rights reserved.
+            © {new Date().getFullYear()} Krama AI Technologies. All rights reserved. Built for Indian Insurance.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            {["SOC 2 Type II", "ISO 27001", "GDPR", "HIPAA"].map((badge) => (
+            {["IRDAI Compliant", "Vision AI Powered", "End-to-End Encrypted", "Data Stays in India"].map((badge) => (
               <span
                 key={badge}
                 className="text-[11px] font-medium uppercase tracking-wider text-foreground/30"

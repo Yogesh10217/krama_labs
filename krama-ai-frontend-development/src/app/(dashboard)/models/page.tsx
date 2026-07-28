@@ -35,9 +35,9 @@ const models = [
     context: "256k",
   },
   {
-    id: "acme-custom-model",
-    name: "Acme Corp Custom HR Model",
-    description: "Your organization's privately fine-tuned model for internal HR policies.",
+    id: "apex-custom-model",
+    name: "Apex Financial Custom Ledger Model",
+    description: "Your organization's privately fine-tuned model for specialized financial statements and ledgers.",
     type: "Custom",
     status: "active",
     latency: "~300ms",

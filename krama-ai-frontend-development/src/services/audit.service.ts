@@ -4,9 +4,9 @@ import type { AuditLog, FeatureFlag, Paginated } from "@/types";
 export const MOCK_AUDIT_LOGS: AuditLog[] = [
   {
     id: "log_101",
-    actor: { id: "u1", name: "Alice Donovan", email: "alice@acmecorp.com" },
+    actor: { id: "u1", name: "Krama Admin", email: "admin@krama.ai" },
     action: "user.role.update",
-    target: "ben@acmecorp.com (Admin -> Owner)",
+    target: "vikram.sethi@starhealth.in (Admin -> Owner)",
     category: "security",
     ipAddress: "192.168.1.104",
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
@@ -16,9 +16,9 @@ export const MOCK_AUDIT_LOGS: AuditLog[] = [
   },
   {
     id: "log_102",
-    actor: { id: "u2", name: "Ben Kessler", email: "ben@acmecorp.com" },
+    actor: { id: "u2", name: "Dr. Vikram Sethi", email: "vikram.sethi@starhealth.in" },
     action: "provider.key.rotate",
-    target: "OpenAI Platform (prov_1)",
+    target: "OpenAI Azure Gateway (prov_1)",
     category: "provider",
     ipAddress: "10.0.1.22",
     userAgent: "Krama CLI / v2.4.0",
@@ -28,9 +28,9 @@ export const MOCK_AUDIT_LOGS: AuditLog[] = [
   },
   {
     id: "log_103",
-    actor: { id: "u3", name: "Clara Nguyen", email: "clara@globex.com" },
+    actor: { id: "u3", name: "Ananya Sharma", email: "a.sharma@icicilombard.com" },
     action: "document.human_review.approve",
-    target: "DOC-8922 (Invoice_XCorp_Q3.pdf)",
+    target: "DOC-8922 (Discharge_Summary_DS-8922.pdf)",
     category: "document",
     ipAddress: "172.16.4.55",
     timestamp: "2024-07-28T18:12:00Z",
@@ -39,7 +39,7 @@ export const MOCK_AUDIT_LOGS: AuditLog[] = [
   },
   {
     id: "log_104",
-    actor: { id: "u5", name: "Elena Petrova", email: "elena@soylent.io" },
+    actor: { id: "u5", name: "Priya Menon", email: "priyam@bajajallianz.com" },
     action: "auth.login.failed",
     target: "Invalid Password (3 attempts)",
     category: "auth",
@@ -50,9 +50,9 @@ export const MOCK_AUDIT_LOGS: AuditLog[] = [
   },
   {
     id: "log_105",
-    actor: { id: "u1", name: "Alice Donovan", email: "alice@acmecorp.com" },
+    actor: { id: "u1", name: "Krama Admin", email: "admin@krama.ai" },
     action: "feature_flag.toggle",
-    target: "OCR Multi-Engine Consensus (ocr_multi_engine)",
+    target: "ICD-10 Multi-Engine Medical Consensus (ocr_multi_engine)",
     category: "organization",
     ipAddress: "192.168.1.104",
     timestamp: "2024-07-28T15:22:10Z",

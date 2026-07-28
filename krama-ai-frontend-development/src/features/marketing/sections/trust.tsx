@@ -2,58 +2,65 @@
 
 import { motion } from "framer-motion";
 import {
-  ShieldCheck,
-  Zap,
-  Target,
-  Building2,
-  Network,
-  ScrollText,
+  Clock,
+  RefreshCw,
+  Files,
+  AlertTriangle,
+  Link2Off,
+  ShieldAlert,
 } from "lucide-react";
 import { Section, SectionHeading, fadeUp, staggerContainer } from "../components/section";
 import { AnimatedCounter } from "../components/animated-counter";
 
-const PILLARS = [
+type Pillar = {
+  icon: any;
+  title: string;
+  description: string;
+  metric: { value: number; decimals?: number; suffix: string; label: string };
+};
+
+const PILLARS: Pillar[] = [
   {
-    icon: ShieldCheck,
-    title: "Security",
+    icon: Clock,
+    title: "Long Processing Times",
     description:
-      "SOC 2 Type II, ISO 27001, and GDPR aligned. AES-256 at rest, TLS 1.3 in transit, with customer-managed keys.",
-    metric: { value: 256, suffix: "-bit", label: "AES encryption" },
+      "Claim filed? Now wait 2-3 weeks for surveyors, document verification, and approvals. Meanwhile, the customer waits.",
+    metric: { value: 14, suffix: "+", label: "Days delay" },
   },
   {
-    icon: Zap,
-    title: "Fast Processing",
+    icon: RefreshCw,
+    title: "Endless Touchpoints",
     description:
-      "Distributed GPU inference with intelligent batching keeps median page latency under a second at any volume.",
-    metric: { value: 0.8, decimals: 1, suffix: "s", label: "Median page latency" },
+      "Surveyor visits the garage. TPA calls for missing documents. Insurer asks for more photos. Every step is another delay.",
+    metric: { value: 6, suffix: "", label: "Manual handoffs" },
   },
   {
-    icon: Target,
-    title: "AI Accuracy",
+    icon: Files,
+    title: "Lost in Paperwork",
     description:
-      "Ensemble OCR with confidence scoring and validation rules that route only genuine edge cases to humans.",
-    metric: { value: 99.4, decimals: 1, suffix: "%", label: "Field-level accuracy" },
+      "Discharge summaries, police FIRs, repair estimates, original bills... one missing document and you're back to square one.",
+    metric: { value: 40, suffix: "+", label: "Pages per claim" },
   },
   {
-    icon: Building2,
-    title: "Enterprise Ready",
+    icon: AlertTriangle,
+    title: "Undetected Fraud",
     description:
-      "SSO via SAML and OIDC, SCIM provisioning, granular RBAC, and contractual uptime backed by SLAs.",
-    metric: { value: 99.99, decimals: 2, suffix: "%", label: "Contractual uptime" },
+      "Forged documents, inflated bills, phantom claims — manual review can't catch what AI can see in seconds.",
+    metric: { value: 8000, suffix: " Cr", label: "Lost to fraud" },
   },
   {
-    icon: Network,
-    title: "Multi-Organization",
+    icon: Link2Off,
+    title: "Disconnected Systems",
     description:
-      "Isolated tenants with independent quotas, routing policies, retention rules, and billing attribution.",
-    metric: { value: 500, suffix: "+", label: "Tenants supported" },
+      "Core systems, TPA portals, and surveyor apps don't talk. Teams spend hours manually re-keying data between screens.",
+    metric: { value: 4, suffix: "", label: "Siloed platforms" },
   },
   {
-    icon: ScrollText,
-    title: "Audit Logging",
+    icon: ShieldAlert,
+    title: "Compliance Challenges",
     description:
-      "Immutable, exportable audit trails covering every access, edit, approval, and administrative action.",
-    metric: { value: 7, suffix: " yrs", label: "Retention window" },
+      "IRDAI SLA deadlines missed due to backlog. Inconsistent policy rule application leads to regulatory fines and warnings.",
+    metric: { value: 100, suffix: "%", label: "Audit risk" },
   },
 ];
 
@@ -61,14 +68,14 @@ export function TrustSection() {
   return (
     <Section id="trust">
       <SectionHeading
-        eyebrow="Built for the enterprise"
+        eyebrow="The Bottleneck"
         title={
           <>
-            Trusted infrastructure for{" "}
-            <span className="ai-gradient-text">regulated industries</span>
+            Every claim is stuck waiting{" "}
+            <span className="ai-gradient-text">for someone to read it</span>
           </>
         }
-        description="Krama AI runs the document backbone for financial services, legal, healthcare, and public sector teams that cannot compromise on security or accuracy."
+        description="While AI writes code, creates art, and drives cars, your claims team is still manually reading discharge summaries. That's the gap we're closing."
       />
 
       <motion.ul

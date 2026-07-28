@@ -37,48 +37,48 @@ export function AmbientBackground() {
         <div
           className="aurora-blob"
           style={{
-            width: "560px",
-            height: "560px",
-            top: "-120px",
-            left: "-80px",
+            width: "620px",
+            height: "620px",
+            top: "-140px",
+            left: "-100px",
             background:
-              "radial-gradient(circle, hsl(262 90% 65% / 0.55), transparent 70%)",
+              "radial-gradient(circle, rgba(124, 58, 237, 0.12), transparent 70%)",
           }}
         />
         {/* Secondary cyan orb */}
         <div
           className="aurora-blob delay-1"
           style={{
-            width: "480px",
-            height: "480px",
-            top: "30%",
-            right: "-120px",
+            width: "520px",
+            height: "520px",
+            top: "25%",
+            right: "-140px",
             background:
-              "radial-gradient(circle, hsl(190 95% 60% / 0.45), transparent 70%)",
+              "radial-gradient(circle, rgba(6, 182, 212, 0.1), transparent 70%)",
           }}
         />
         {/* Tertiary pink orb */}
         <div
           className="aurora-blob delay-2"
           style={{
-            width: "420px",
-            height: "420px",
-            bottom: "-80px",
-            left: "30%",
+            width: "460px",
+            height: "460px",
+            bottom: "-100px",
+            left: "25%",
             background:
-              "radial-gradient(circle, hsl(320 90% 65% / 0.35), transparent 70%)",
+              "radial-gradient(circle, rgba(236, 72, 153, 0.08), transparent 70%)",
           }}
         />
         {/* Indigo accent */}
         <div
           className="aurora-blob delay-3"
           style={{
-            width: "360px",
-            height: "360px",
-            top: "50%",
-            left: "10%",
+            width: "400px",
+            height: "400px",
+            top: "45%",
+            left: "8%",
             background:
-              "radial-gradient(circle, hsl(240 90% 65% / 0.3), transparent 70%)",
+              "radial-gradient(circle, rgba(99, 102, 241, 0.07), transparent 70%)",
           }}
         />
       </div>
@@ -86,12 +86,12 @@ export function AmbientBackground() {
       {/* 3. Noise overlay — provides subtle tactile grain */}
       <div className="absolute inset-0 noise" />
 
-      {/* Vignette — darkens edges for depth */}
+      {/* Vignette — soft outer radial focus */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 55%, hsl(240 25% 4% / 0.5) 100%)",
+            "radial-gradient(ellipse at center, transparent 60%, rgba(248, 250, 252, 0.7) 100%)",
         }}
       />
     </div>

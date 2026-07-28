@@ -41,10 +41,10 @@ const providerStatus = [
 ];
 
 const recentDocs = [
-  { id: "1", file: "Q4_Financial_Report.pdf", status: "extracted", time: "2 mins ago" },
-  { id: "2", file: "MSA_TechCorp_Signed.docx", status: "processing", time: "15 mins ago" },
-  { id: "3", file: "Employee_Handbook_v2.pdf", status: "failed", time: "1 hour ago" },
-  { id: "4", file: "Invoice_INV-2024.pdf", status: "extracted", time: "3 hours ago" },
+  { id: "1", file: "Commercial_Invoice_INV-8922.pdf", status: "extracted", time: "2 mins ago" },
+  { id: "2", file: "Master_Service_Agreement_MSA-8920.pdf", status: "processing", time: "15 mins ago" },
+  { id: "3", file: "Health_Insurance_Claim_CLM-8919.pdf", status: "failed", time: "1 hour ago" },
+  { id: "4", file: "Purchase_Order_PO-789.pdf", status: "extracted", time: "3 hours ago" },
 ];
 
 const queue = [
@@ -109,15 +109,11 @@ export default function DashboardPage() {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              The intelligence layer{" "}
-              <span className="ai-gradient-text">for your documents.</span>
+              Document Intelligence for{" "}
+              <span className="ai-gradient-text">Insurance Professionals.</span>
             </h1>
             <p className="text-lg text-foreground/70 max-w-xl leading-relaxed">
-              Welcome back, Admin. You have{" "}
-              <span className="text-foreground font-medium">169 documents</span>{" "}
-              pending review and{" "}
-              <span className="text-foreground font-medium">2 active</span>{" "}
-              batch jobs running.
+              Welcome back, Admin. Domain-specific AI that turns discharge summaries, repair estimates, and claim forms into validated decisions in minutes.
             </p>
           </div>
 

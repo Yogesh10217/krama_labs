@@ -52,11 +52,11 @@ const kpiVariants: Variants = {
 export function KpiCard({ title, value, trend, trendPositive = true, icon: Icon, subtitle, index = 0 }: KpiCardProps) {
   return (
     <motion.div variants={kpiVariants} initial="hidden" animate="show" custom={index}>
-      <Card className="hover:border-primary/30 transition-colors shadow-sm bg-card/50 backdrop-blur h-full">
+      <Card className="glass lift transition-all duration-300 h-full border-border/80">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 bg-secondary rounded-lg">
-              <Icon className="w-4 h-4 text-primary" />
+            <div className="p-2.5 bg-primary/10 rounded-xl">
+              <Icon className="w-4.5 h-4.5 text-primary" />
             </div>
             {trend && (
               <Badge
@@ -68,8 +68,8 @@ export function KpiCard({ title, value, trend, trendPositive = true, icon: Icon,
               </Badge>
             )}
           </div>
-          <h3 className="text-xs font-medium text-muted-foreground mb-1">{title}</h3>
-          <p className="text-2xl font-bold tracking-tight">{value}</p>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">{title}</h3>
+          <p className="text-2xl font-bold tracking-tight text-foreground">{value}</p>
           {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
         </CardContent>
       </Card>
@@ -139,7 +139,7 @@ export function ExportDialog({ label = "Export" }: { label?: string }) {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button className="gap-2">
+          <Button className="gap-2 ai-gradient-bg text-white">
             <Download className="w-4 h-4" /> Export
           </Button>
         </DialogFooter>
@@ -171,9 +171,10 @@ export function RangeFilter() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Organizations</SelectItem>
-          <SelectItem value="acme">Acme Corporation</SelectItem>
-          <SelectItem value="globex">Globex Inc</SelectItem>
-          <SelectItem value="soylent">Soylent Corp</SelectItem>
+          <SelectItem value="apex">Apex Financial Global</SelectItem>
+          <SelectItem value="nexus">Nexus Healthcare Group</SelectItem>
+          <SelectItem value="vertex">Vertex Global Logistics</SelectItem>
+          <SelectItem value="horizon">Horizon Insurance Systems</SelectItem>
         </SelectContent>
       </Select>
     </div>
@@ -184,12 +185,14 @@ export function RangeFilter() {
 
 export const chartTooltipStyle = {
   contentStyle: {
-    backgroundColor: "hsl(var(--popover))",
-    border: "1px solid hsl(var(--border))",
-    borderRadius: "8px",
+    backgroundColor: "#ffffff",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    boxShadow: "0 10px 25px -5px rgba(15, 23, 42, 0.08)",
     fontSize: "12px",
+    padding: "8px 12px",
   },
-  itemStyle: { color: "hsl(var(--foreground))" },
+  itemStyle: { color: "#111827", fontWeight: 500 },
 };
 
 /* ------------------------------- Page Header ----------------------------------- */

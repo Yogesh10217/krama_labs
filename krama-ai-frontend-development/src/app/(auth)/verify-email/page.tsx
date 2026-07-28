@@ -128,7 +128,7 @@ export default function VerifyEmailPage() {
           </CardTitle>
           <CardDescription className="mx-auto mt-2 max-w-sm text-[15px] leading-relaxed">
             We sent a 6-digit code to{" "}
-            <strong className="text-foreground">alice@acmecorp.com</strong>. Enter it below to
+            <strong className="text-foreground">admin@krama.ai</strong>. Enter it below to
             activate your account.
           </CardDescription>
         </div>

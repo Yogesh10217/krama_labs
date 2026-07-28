@@ -2,12 +2,12 @@ import { apiClient } from "./api-client";
 import type { UserAccount, UserRole, UserStatus, Paginated, RbacPermission } from "@/types";
 
 export const MOCK_USERS: UserAccount[] = [
-  { id: "u1", name: "Alice Donovan", email: "alice@acmecorp.com", role: "owner", status: "active", organizationId: "org_1", organizationName: "Acme Corporation", mfaEnabled: true, lastActiveAt: "2 mins ago", createdAt: "2024-01-15T08:30:00Z" },
-  { id: "u2", name: "Ben Kessler", email: "ben@acmecorp.com", role: "admin", status: "active", organizationId: "org_1", organizationName: "Acme Corporation", mfaEnabled: true, lastActiveAt: "1 hour ago", createdAt: "2024-02-01T10:15:00Z" },
-  { id: "u3", name: "Clara Nguyen", email: "clara@globex.com", role: "reviewer", status: "active", organizationId: "org_2", organizationName: "Globex Inc", mfaEnabled: false, lastActiveAt: "Yesterday", createdAt: "2024-03-12T11:00:00Z" },
-  { id: "u4", name: "Daniel Ortiz", email: "daniel@globex.com", role: "analyst", status: "invited", organizationId: "org_2", organizationName: "Globex Inc", mfaEnabled: false, lastActiveAt: "—", createdAt: "2024-07-20T16:00:00Z" },
-  { id: "u5", name: "Elena Petrova", email: "elena@soylent.io", role: "reviewer", status: "suspended", organizationId: "org_3", organizationName: "Soylent Corp", mfaEnabled: true, lastActiveAt: "3 weeks ago", createdAt: "2024-04-05T09:30:00Z" },
-  { id: "u6", name: "Frank Miller", email: "frank@acmecorp.com", role: "analyst", status: "active", organizationId: "org_1", organizationName: "Acme Corporation", mfaEnabled: true, lastActiveAt: "4 hours ago", createdAt: "2024-05-19T14:20:00Z" },
+  { id: "u1", name: "Krama Admin", email: "admin@krama.ai", role: "owner", status: "active", organizationId: "org_1", organizationName: "Star Health Insurance", mfaEnabled: true, lastActiveAt: "2 mins ago", createdAt: "2024-01-15T08:30:00Z" },
+  { id: "u2", name: "Dr. Vikram Sethi", email: "vikram.sethi@starhealth.in", role: "admin", status: "active", organizationId: "org_1", organizationName: "Star Health Insurance", mfaEnabled: true, lastActiveAt: "1 hour ago", createdAt: "2024-02-01T10:15:00Z" },
+  { id: "u3", name: "Ananya Sharma", email: "a.sharma@icicilombard.com", role: "reviewer", status: "active", organizationId: "org_2", organizationName: "ICICI Lombard Claims", mfaEnabled: false, lastActiveAt: "Yesterday", createdAt: "2024-03-12T11:00:00Z" },
+  { id: "u4", name: "Rajesh Nair", email: "rnair@hdfcergo.com", role: "analyst", status: "invited", organizationId: "org_3", organizationName: "HDFC ERGO General", mfaEnabled: false, lastActiveAt: "—", createdAt: "2024-07-20T16:00:00Z" },
+  { id: "u5", name: "Priya Menon", email: "priyam@bajajallianz.com", role: "reviewer", status: "suspended", organizationId: "org_4", organizationName: "Bajaj Allianz TPA", mfaEnabled: true, lastActiveAt: "3 weeks ago", createdAt: "2024-04-05T09:30:00Z" },
+  { id: "u6", name: "Siddharth Rao", email: "siddharth.rao@starhealth.in", role: "analyst", status: "active", organizationId: "org_1", organizationName: "Star Health Insurance", mfaEnabled: true, lastActiveAt: "4 hours ago", createdAt: "2024-05-19T14:20:00Z" },
 ];
 
 export const MOCK_RBAC_PERMISSIONS: RbacPermission[] = [

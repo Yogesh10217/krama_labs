@@ -13,11 +13,11 @@ import { cn } from "@/lib/utils";
 import { EmptyState } from "@/components/shared/states";
 
 const reviewQueue = [
-  { id: "DOC-8922", name: "Invoice_XCorp_Q3.pdf", model: "Invoice Pro", confidence: "74%", priority: "High", waitTime: "2h 14m", errors: 2 },
-  { id: "DOC-8924", name: "Employee_Contract_JSmith.docx", model: "Legal Eagle", confidence: "68%", priority: "Medium", waitTime: "5h 22m", errors: 1 },
-  { id: "DOC-8925", name: "Tax_Return_2023_Acme.pdf", model: "Extract v2", confidence: "45%", priority: "High", waitTime: "1h 10m", errors: 5 },
-  { id: "DOC-8928", name: "Receipt_Scan_Travel.jpg", model: "Invoice Pro", confidence: "81%", priority: "Low", waitTime: "12h 45m", errors: 1 },
-  { id: "DOC-8931", name: "MSA_Globex_Draft.pdf", model: "Legal Eagle", confidence: "52%", priority: "High", waitTime: "45m", errors: 3 },
+  { id: "DOC-8922", name: "Commercial_Invoice_INV-8922.pdf", model: "FastAPI LayoutLMv3", confidence: "74%", priority: "High", waitTime: "2h 14m", errors: 2 },
+  { id: "DOC-8924", name: "Executive_Contract_Apex.docx", model: "OpenAI GPT-4o Vision", confidence: "68%", priority: "Medium", waitTime: "5h 22m", errors: 1 },
+  { id: "DOC-8925", name: "W2_Tax_Return_2024.pdf", model: "Krama OCR v4", confidence: "45%", priority: "High", waitTime: "1h 10m", errors: 5 },
+  { id: "DOC-8928", name: "Travel_Expense_Receipt.jpg", model: "FastAPI LayoutLMv3", confidence: "81%", priority: "Low", waitTime: "12h 45m", errors: 1 },
+  { id: "DOC-8931", name: "Master_Service_Agreement_Draft.pdf", model: "Claude 3.5 Sonnet", confidence: "52%", priority: "High", waitTime: "45m", errors: 3 },
 ];
 
 export default function ReviewQueuePage() {

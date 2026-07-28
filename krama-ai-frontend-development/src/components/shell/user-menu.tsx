@@ -33,7 +33,6 @@ const MENU_GROUPS = [
   [
     { label: "Notifications", href: "/settings#general", icon: Bell },
     { label: "API Keys", href: "/settings#api", icon: KeyRound },
-    { label: "Appearance", href: "/settings#general", icon: SlidersHorizontal },
   ],
   [{ label: "Help & Support", href: "#", icon: LifeBuoy }],
 ];
